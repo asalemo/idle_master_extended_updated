@@ -387,4 +387,5 @@ não compartilhe essa informação com ninguém, pois poderá ser usada por pess
   <data name="shutdown_title" xml:space="preserve"><value>Desligar o Windows</value></data>
   <data name="shutdown_pending" xml:space="preserve"><value>O computador está prestes a desligar. Selecione Cancelar para mantê-lo ligado.</value></data>
   <data name="session_completed" xml:space="preserve"><value>Sessão concluída</value></data>
+  <data name="manual_signin" xml:space="preserve"><value>Inserir os dados da sessão</value></data>
 </root>

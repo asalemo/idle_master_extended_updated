@@ -389,4 +389,5 @@ tu cuenta de Steam.</value>
   <data name="shutdown_title" xml:space="preserve"><value>Apagar Windows</value></data>
   <data name="shutdown_pending" xml:space="preserve"><value>El equipo está a punto de apagarse. Selecciona Cancelar para mantenerlo encendido.</value></data>
   <data name="session_completed" xml:space="preserve"><value>Sesión finalizada</value></data>
+  <data name="manual_signin" xml:space="preserve"><value>Introducir los datos de sesión</value></data>
 </root>

@@ -394,4 +394,5 @@ celles-ci peuvent être utilisées par un pirate pour se connecter à votre comp
   <data name="shutdown_title" xml:space="preserve"><value>Éteindre Windows</value></data>
   <data name="shutdown_pending" xml:space="preserve"><value>Ton ordinateur va s’éteindre. Clique sur Annuler pour le garder allumé.</value></data>
   <data name="session_completed" xml:space="preserve"><value>Session terminée</value></data>
+  <data name="manual_signin" xml:space="preserve"><value>Saisir les informations de session</value></data>
 </root>

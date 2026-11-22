@@ -1,6 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
-using System.IO;
+﻿using System;
 using System.Windows.Forms;
 
 namespace IdleMasterExtended
@@ -14,18 +12,8 @@ namespace IdleMasterExtended
         static void Main()
         {
             IdleMaster.WindowsErrorReporting.DisableErrorWindows();
-            // Set the Browser emulation version for embedded browser control
-            try
-            {
-                RegistryKey ie_root = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION");
-                RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", true);
-                String programName = Path.GetFileName(Environment.GetCommandLineArgs()[0]);
-                key.SetValue(programName, (int)10001, RegistryValueKind.DWord);
-            }
-            catch (Exception ex)
-            {
-                Logger.Exception(ex, "Program -> Main -> Registry and environment modifications resulted in an exception.");
-            }
+            System.Net.WebRequest.DefaultCachePolicy = new System.Net.Cache.RequestCachePolicy(
+                System.Net.Cache.RequestCacheLevel.NoCacheNoStore);
 
             Application.ThreadException += (o, a) => Logger.Exception(a.Exception);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);

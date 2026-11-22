@@ -39,6 +39,10 @@ namespace IdleMasterExtended
                 Regex.IsMatch(url ?? "", "\\A" + Regex.Escape(profile) + @"(?:/badges/\?p=[1-9][0-9]*|/gamecards/[1-9][0-9]*)?\z");
         }
 
+        private readonly string temporaryProfile = Path.Combine(Path.GetTempPath(), "IdleMasterExtended-WebView2-" + Guid.NewGuid().ToString("N"));
+        private System.Diagnostics.Process browserProcess;
+        private bool cleanupScheduled;
+
         private SteamBrowserSession()
         {
             Text = T("browser_signin");
@@ -47,8 +51,8 @@ namespace IdleMasterExtended
             MinimumSize = new Size(480, 420);
             browser.CreationProperties = new CoreWebView2CreationProperties
             {
-                UserDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "IdleMasterExtended", "WebView2"),
+                UserDataFolder = temporaryProfile,
+                AdditionalBrowserArguments = "--disable-logging",
                 IsInPrivateModeEnabled = true,
                 Language = CultureInfo.CurrentUICulture.Name
             };
@@ -87,6 +91,7 @@ namespace IdleMasterExtended
         private void Configure()
         {
             var core = browser.CoreWebView2;
+            browserProcess = System.Diagnostics.Process.GetProcessById((int)core.BrowserProcessId);
             core.Settings.AreHostObjectsAllowed = false;
             core.Settings.AreDevToolsEnabled = false;
             core.Settings.AreDefaultContextMenusEnabled = false;
@@ -232,6 +237,31 @@ namespace IdleMasterExtended
                 if (Active == this) Active = null;
             }
             base.Dispose(disposing);
+            if (!disposing || cleanupScheduled) return;
+            cleanupScheduled = true;
+            // Keep cleanup off the UI thread and allow it to finish during normal shutdown.
+            new System.Threading.Thread(RemoveTemporaryProfile).Start();
+        }
+
+        private void RemoveTemporaryProfile()
+        {
+            using (browserProcess)
+            {
+                try { browserProcess?.WaitForExit(5000); }
+                catch (InvalidOperationException) { }
+            }
+            for (int attempt = 0; attempt < 20; attempt++)
+            {
+                try
+                {
+                    Directory.Delete(temporaryProfile, true);
+                    return;
+                }
+                catch (DirectoryNotFoundException) { return; }
+                catch (IOException) { }
+                catch (UnauthorizedAccessException) { }
+                System.Threading.Thread.Sleep(250);
+            }
         }
     }
 }

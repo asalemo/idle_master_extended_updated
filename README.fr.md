@@ -4,6 +4,10 @@
 
 Ce fork Windows d’Idle Master Extended repère les jeux de ta bibliothèque Steam qui ont encore des cartes à distribuer. Il utilise le programme auxiliaire `steam-idle.exe` pour signaler une activité en jeu à Steam. Steam détermine le moment où les cartes sont distribuées.
 
+## Connexion sur develop
+
+Clique sur **Se connecter**, puis choisis **Se connecter avec Steam** ou **Saisir les informations de session**. La saisie manuelle accepte sessionid, steamLoginSecure et le cookie parental facultatif pour cette exécution. Les préférences sont conservées. Les diagnostics et les compteurs d’activité restent en mémoire. La connexion par navigateur utilise un profil privé temporaire que l’application tente de supprimer à la fermeture du navigateur. Un arrêt forcé peut laisser des fichiers temporaires.
+
 ## Connexion et langue dans la RC3
 
 [Guide RC3 : se connecter à Steam, changer de langue et tester un seul jeu](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas)
@@ -37,7 +41,7 @@ Les versions publiées pour ce fork figurent sur la [page des versions](https://
 
 Si un programme auxiliaire se ferme de lui-même ou ne démarre pas, ouvre le menu **Diagnostics** qui apparaît dans la fenêtre principale. Chaque entrée indique l’heure, le jeu, son AppID et le motif disponible. Une initialisation Steam refusée, une bibliothèque native manquante et une fermeture avec un code inconnu ont des messages distincts. Les arrêts demandés par Idle Master (pause ou changement de jeu) ne sont pas signalés. Le menu conserve les 50 derniers problèmes distincts de la session.
 
-Le statut « En jeu » attend la confirmation de l’initialisation Steam. Après un échec, le prochain essai a lieu une minute plus tard. **Fichier → Réessayer maintenant** relance immédiatement les jeux en attente. Une panne temporaire du site Steam conserve la session enregistrée.
+Le statut « En jeu » attend la confirmation de l’initialisation Steam. Après un échec, le prochain essai a lieu une minute plus tard. **Fichier → Réessayer maintenant** relance immédiatement les jeux en attente. Une panne temporaire du site Steam conserve la session en cours.
 
 ## Changements de ce fork
 

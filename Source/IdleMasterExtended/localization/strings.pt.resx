@@ -389,4 +389,5 @@ para aceder à sua conta do Steam.</value>
   <data name="shutdown_title" xml:space="preserve"><value>Desligar o Windows</value></data>
   <data name="shutdown_pending" xml:space="preserve"><value>O computador vai desligar-se. Seleciona Cancelar para o manter ligado.</value></data>
   <data name="session_completed" xml:space="preserve"><value>Sessão concluída</value></data>
+  <data name="manual_signin" xml:space="preserve"><value>Introduzir os dados da sessão</value></data>
 </root>

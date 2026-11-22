@@ -18,9 +18,11 @@ namespace IdleMasterExtended
         /// <summary>
         /// Instantiates a new <c>CookieClient</c> object.
         /// </summary>
-        public CookieClient()
+        public CookieClient() : this(ManualSession.Current) { }
+
+        internal CookieClient(ManualSession session)
         {
-            Cookie = GenerateCookies();
+            Cookie = GenerateCookies(session);
             Encoding = Encoding.UTF8;
         }
 
@@ -66,11 +68,17 @@ namespace IdleMasterExtended
                 if (result == "EXPIRED") return SessionStatus.Expired;
                 return result == "CONNECTED" ? SessionStatus.Connected : SessionStatus.Unavailable;
             }
-            using (var client = new CookieClient())
+            return await CheckManualSessionAsync(ManualSession.Current);
+        }
+
+        internal static async Task<SessionStatus> CheckManualSessionAsync(ManualSession candidate)
+        {
+            if (candidate == null || candidate.SteamId.Length != 17 || string.IsNullOrEmpty(candidate.SessionId)) return SessionStatus.Expired;
+            using (var client = new CookieClient(candidate))
             {
                 try
                 {
-                    var page = await client.DownloadStringTaskAsync(Settings.Default.myProfileURL);
+                    var page = await client.DownloadStringTaskAsync(candidate.Url);
                     if (client.sessionExpired) return SessionStatus.Expired;
                     var document = new HtmlDocument();
                     document.LoadHtml(page);
@@ -105,26 +113,16 @@ namespace IdleMasterExtended
             return response;
         }
 
-        private static CookieContainer GenerateCookies()
+        private static CookieContainer GenerateCookies(ManualSession session)
         {
             var cookies = new CookieContainer();
+            if (session == null) return cookies;
             var target = new Uri("https://steamcommunity.com");
-
-            cookies.Add(new Cookie("sessionid", Settings.Default.sessionid) { Domain = target.Host });
-            cookies.Add(new Cookie("steamLoginSecure", Settings.Default.steamLoginSecure) { Domain = target.Host });
-            cookies.Add(new Cookie("steamparental", Settings.Default.steamparental) { Domain = target.Host });
-            cookies.Add(new Cookie("steamRememberLogin", Settings.Default.steamRememberLogin) { Domain = target.Host });
-            cookies.Add(new Cookie(GetSteamMachineAuthCookieName(), Settings.Default.steamMachineAuth) { Domain = target.Host });
-
+            cookies.Add(target, new Cookie("sessionid", session.SessionId));
+            cookies.Add(target, new Cookie("steamLoginSecure", session.Login));
+            if (!string.IsNullOrEmpty(session.Parental))
+                cookies.Add(target, new Cookie("steamparental", session.Parental));
             return cookies;
-        }
-
-        private static string GetSteamMachineAuthCookieName()
-        {
-            if (Settings.Default.steamLoginSecure != null && Settings.Default.steamLoginSecure.Length > 17)
-                return string.Format("steamMachineAuth{0}", Settings.Default.steamLoginSecure.Substring(0, 17));
-
-            return "steamMachineAuth";
         }
     }
 }

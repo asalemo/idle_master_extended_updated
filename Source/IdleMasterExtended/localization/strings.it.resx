@@ -387,4 +387,5 @@ Non condividere questa informazione con nessuno, in quanto potrebbe essere utili
   <data name="shutdown_title" xml:space="preserve"><value>Spegni Windows</value></data>
   <data name="shutdown_pending" xml:space="preserve"><value>Il computer sta per spegnersi. Seleziona Annulla per tenerlo acceso.</value></data>
   <data name="session_completed" xml:space="preserve"><value>Sessione terminata</value></data>
+  <data name="manual_signin" xml:space="preserve"><value>Inserisci i dati della sessione</value></data>
 </root>

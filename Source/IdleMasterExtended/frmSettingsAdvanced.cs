@@ -55,9 +55,10 @@ namespace IdleMasterExtended
             // Links
             linkLabelWhatIsThis.LinkColor = customTheme ? Color.GhostWhite : Color.Blue;
 
-            if (!string.IsNullOrWhiteSpace(Settings.Default.sessionid))
+            txtSessionID.UseSystemPasswordChar = txtSteamLoginSecure.UseSystemPasswordChar = txtSteamParental.UseSystemPasswordChar = true;
+            if (!string.IsNullOrWhiteSpace(ManualSession.Current?.SessionId))
             {
-                txtSessionID.Text = Settings.Default.sessionid;
+                txtSessionID.Text = ManualSession.Current?.SessionId;
                 txtSessionID.Enabled = false;
             }
             else
@@ -65,9 +66,9 @@ namespace IdleMasterExtended
                 txtSessionID.UseSystemPasswordChar = true;
             }
 
-            if (!string.IsNullOrWhiteSpace(Settings.Default.steamLoginSecure))
+            if (!string.IsNullOrWhiteSpace(ManualSession.Current?.Login))
             {
-                txtSteamLoginSecure.Text = Settings.Default.steamLoginSecure;
+                txtSteamLoginSecure.Text = ManualSession.Current?.Login;
                 txtSteamLoginSecure.Enabled = false;
             }
             else
@@ -75,9 +76,9 @@ namespace IdleMasterExtended
                 txtSteamLoginSecure.UseSystemPasswordChar = true;
             }
 
-            if (!string.IsNullOrWhiteSpace(Settings.Default.steamparental))
+            if (!string.IsNullOrWhiteSpace(ManualSession.Current?.Parental))
             {
-                txtSteamParental.Text = Settings.Default.steamparental;
+                txtSteamParental.Text = ManualSession.Current?.Parental;
                 txtSteamParental.Enabled = false;
             }
             else
@@ -109,23 +110,18 @@ namespace IdleMasterExtended
             btnUpdate.Enabled = true;
         }
 
-        private async Task CheckAndSave()
+        private async Task ValidateSessionAsync()
         {
-            var oldSession = Settings.Default.sessionid;
-            var oldLogin = Settings.Default.steamLoginSecure;
-            var oldUrl = Settings.Default.myProfileURL;
-            var oldParental = Settings.Default.steamparental;
             var status = SessionStatus.Unavailable;
             try
             {
-                Settings.Default.sessionid = txtSessionID.Text.Trim();
-                Settings.Default.steamLoginSecure = txtSteamLoginSecure.Text.Trim();
-                Settings.Default.myProfileURL = SteamProfile.GetSteamUrl();
-                Settings.Default.steamparental = txtSteamParental.Text.Trim();
-                status = await CookieClient.CheckSessionAsync();
+                var candidate = new ManualSession(txtSessionID.Text.Trim(), txtSteamLoginSecure.Text.Trim(), txtSteamParental.Text.Trim());
+                status = await CookieClient.CheckManualSessionAsync(candidate);
+                if (IsDisposed || Disposing || !Visible) return;
                 if (status == SessionStatus.Connected)
                 {
-                    Settings.Default.Save();
+                    ManualSession.Current = candidate;
+                    DialogResult = DialogResult.OK;
                     Close();
                     return;
                 }
@@ -134,10 +130,7 @@ namespace IdleMasterExtended
             {
                 Logger.Exception(ex, "Could not validate Steam session.");
             }
-            Settings.Default.sessionid = oldSession;
-            Settings.Default.steamLoginSecure = oldLogin;
-            Settings.Default.myProfileURL = oldUrl;
-            Settings.Default.steamparental = oldParental;
+            if (IsDisposed || Disposing || !Visible) return;
             txtSessionID.Enabled = txtSteamLoginSecure.Enabled = txtSteamParental.Enabled = true;
             btnUpdate.Text = localization.strings.update;
             btnUpdate.Enabled = true;
@@ -155,7 +148,7 @@ namespace IdleMasterExtended
 
             btnUpdate.Text = localization.strings.validating;
 
-            await CheckAndSave();
+            await ValidateSessionAsync();
         }
 
         private void linkLabelWhatIsThis_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

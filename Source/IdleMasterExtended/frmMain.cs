@@ -122,7 +122,7 @@ namespace IdleMasterExtended
                 catch (Exception ex)
                 {
                     if (session != idleSession) return;
-                    Logger.Exception(ex, "Badge -> LoadBadgesAsync, for profile = " + SteamProfile.ProfileUrl);
+                    Logger.Exception(ex, "Could not load Steam badges.");
                     ResetFormDesign();
                     ReloadCount = 1;
                     tmrBadgeReload.Enabled = true;
@@ -859,15 +859,7 @@ namespace IdleMasterExtended
         private void ResetClientStatus()
         {
             SteamBrowserSession.Disconnect();
-            // Clear the settings
-            Settings.Default.sessionid = string.Empty;
-            Settings.Default.steamLogin = string.Empty;
-            Settings.Default.steamLoginSecure = string.Empty;
-            Settings.Default.steamMachineAuth = string.Empty;
-            Settings.Default.steamRememberLogin = string.Empty;
-            Settings.Default.myProfileURL = string.Empty;
-            Settings.Default.steamparental = string.Empty;
-            Settings.Default.Save();
+            ManualSession.Current = null;
 
             // Stop the steam-idle process
             StopIdle();
@@ -923,13 +915,7 @@ namespace IdleMasterExtended
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            // Update the settings, if needed.  When the application updates, settings will persist.
-            if (Settings.Default.updateNeeded)
-            {
-                Settings.Default.Upgrade();
-                Settings.Default.updateNeeded = false;
-                Settings.Default.Save();
-            }
+            Settings.Default.LoadPreferences();
 
             InterfaceLanguage.Apply(Settings.Default.language);
 
@@ -1001,6 +987,7 @@ namespace IdleMasterExtended
         private void frmMain_FormClose(object sender, FormClosedEventArgs e)
         {
             SteamBrowserSession.Disconnect();
+            ManualSession.Current = null;
             StopIdle();
         }
 
@@ -1254,11 +1241,32 @@ namespace IdleMasterExtended
             ResetClientStatus();
         }
 
-        private async void lnkSignIn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lnkSignIn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var choices = new ContextMenuStrip();
+            choices.Items.Add(localization.strings.ResourceManager.GetString("browser_signin"), null,
+                async (s, args) => await SignInAsync(false));
+            choices.Items.Add(localization.strings.ResourceManager.GetString("manual_signin"), null,
+                async (s, args) => await SignInAsync(true));
+            choices.Closed += (s, args) =>
+            {
+                if (IsHandleCreated && !IsDisposed) BeginInvoke(new Action(choices.Dispose));
+                else choices.Dispose();
+            };
+            choices.Show(lnkSignIn, new Point(0, lnkSignIn.Height));
+        }
+
+        private async Task SignInAsync(bool manual)
         {
             try
             {
-                if (!await SteamBrowserSession.ConnectAsync(this) || IsDisposed) return;
+                if (manual)
+                {
+                    using (var form = new frmSettingsAdvanced())
+                        if (form.ShowDialog(this) != DialogResult.OK) return;
+                }
+                else if (!await SteamBrowserSession.ConnectAsync(this)) return;
+                if (IsDisposed) return;
                 StopIdle();
                 AllBadges.Clear();
                 ReloadCount = 0;
@@ -1333,9 +1341,9 @@ namespace IdleMasterExtended
             tmrReadyToGo.Enabled = false;
 
             int session = idleSession;
-            string login = Settings.Default.steamLoginSecure;
+            var login = ManualSession.Current;
             var status = await CookieClient.CheckSessionAsync();
-            if (IsDisposed || Disposing || session != idleSession || login != Settings.Default.steamLoginSecure) return;
+            if (IsDisposed || Disposing || session != idleSession || login != ManualSession.Current) return;
             tmrReadyToGo.Interval = 100;
             if (status == SessionStatus.Connected)
             {

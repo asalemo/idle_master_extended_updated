@@ -12,6 +12,10 @@ Idle Master checks your Steam badges for remaining trading card drops and starts
 2. Open Steam and sign in. Run `IdleMasterExtended.exe` from the extracted folder with `steam-idle.exe`, the DLLs, `runtimes` and `Languages` beside it.
 3. Use the sign-in link to configure your Steam Community session. Choose an idling mode in **File → Settings**.
 
+## Sign-in on develop
+
+Select **Sign In**, then choose **Sign in with Steam** or **Enter session details manually**. The manual option accepts sessionid, steamLoginSecure and an optional parental cookie for this run. Preferences persist. Diagnostics and activity counters stay in memory. Browser sign-in uses a temporary private WebView2 profile and attempts to remove it when the browser closes. A forced shutdown can leave temporary files behind.
+
 ## Sign-in and language in RC3
 
 In RC3, select **Sign in**, complete sign-in on Steam’s official page, then select **Use this Steam account**. The window shows your public SteamID. This private Microsoft Edge WebView2 session lasts until sign-out or application exit. Manual session fields remain available in Settings.
@@ -25,7 +29,7 @@ Fast mode runs up to 30 eligible games in parallel while they are below two reco
 
 **Starting** means the helper has launched. **Currently in-game** appears after the helper confirms local Steam API initialization. If it exits, the Diagnostics menu identifies the game, AppID and reason. Failed helpers wait one minute between attempts. **File → Retry now** retries pending games immediately.
 
-The profile name and orphan-process cleanup run in the background. An unreadable profile or temporary connection failure preserves the saved session and schedules another startup check in one minute.
+The profile name and orphan-process cleanup run in the background. An unreadable profile or temporary connection failure preserves the current session and schedules another startup check in one minute.
 
 ## RC2 on Windows
 

@@ -21,10 +21,8 @@ namespace IdleMasterExtended
             lblTotalHeader.Text = localization.strings.total + ":";
 
             TimeSpan sessionMinutesIdled = TimeSpan.FromMinutes(statistics.getSessionMinutesIdled());
-            TimeSpan totalMinutesIdled = TimeSpan.FromMinutes(Properties.Settings.Default.totalMinutesIdled);
 
             int sessionHoursIdled = (sessionMinutesIdled.Days * 24) + sessionMinutesIdled.Hours;
-            int totalHoursIdled = (totalMinutesIdled.Days * 24) + totalMinutesIdled.Hours;
 
             //Session
             if (sessionHoursIdled > 0)
@@ -43,22 +41,7 @@ namespace IdleMasterExtended
             }
             lblSessionCards.Text = statistics.getSessionCardIdled().ToString() + " cards idled";
 
-            //Total
-            if (totalHoursIdled > 0)
-            {
-                lblTotalTime.Text = String.Format("{0} hour{1}, {2} minute{3} idled",
-                    totalHoursIdled,
-                    totalHoursIdled == 1 ? "" : "s",
-                    totalMinutesIdled.Minutes,
-                    totalMinutesIdled.Minutes == 1 ? "" : "s");
-            }
-            else
-            {
-                lblTotalTime.Text = String.Format("{0} minute{1} idled",
-                    totalMinutesIdled.Minutes,
-                    totalMinutesIdled.Minutes == 1 ? "" : "s");
-            }
-            lblTotalCards.Text = Properties.Settings.Default.totalCardIdled.ToString() + " cards idled";
+            lblTotalHeader.Visible = lblTotalTime.Visible = lblTotalCards.Visible = false;
 
             if (Properties.Settings.Default.customTheme)
             {

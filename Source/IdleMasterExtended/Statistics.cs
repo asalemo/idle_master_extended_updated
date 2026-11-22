@@ -42,15 +42,11 @@
 
         public void increaseCardIdled(uint number)
         {
-            Properties.Settings.Default.totalCardIdled += number;
-            Properties.Settings.Default.Save();
             sessionCardIdled += number;
         }
 
         public void increaseMinutesIdled()
         {
-            Properties.Settings.Default.totalMinutesIdled++;
-            Properties.Settings.Default.Save();
             sessionMinutesIdled++;
         }
 

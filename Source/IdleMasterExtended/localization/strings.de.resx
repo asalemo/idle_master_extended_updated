@@ -389,4 +389,5 @@ um sich bei deinem Steam Account anzumelden!</value>
   <data name="shutdown_title" xml:space="preserve"><value>Windows herunterfahren</value></data>
   <data name="shutdown_pending" xml:space="preserve"><value>Der Computer wird gleich heruntergefahren. Wähle Abbrechen, um ihn eingeschaltet zu lassen.</value></data>
   <data name="session_completed" xml:space="preserve"><value>Sitzung beendet</value></data>
+  <data name="manual_signin" xml:space="preserve"><value>Sitzungsdaten manuell eingeben</value></data>
 </root>

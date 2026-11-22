@@ -7,28 +7,31 @@ using IdleMasterExtended.Properties;
 
 namespace IdleMasterExtended
 {
+    internal sealed class ManualSession
+    {
+        internal static ManualSession Current { get; set; }
+        internal readonly string SessionId, Login, Parental, SteamId;
+        internal string Url => "https://steamcommunity.com/profiles/" + SteamId;
+
+        internal ManualSession(string sessionId, string login, string parental)
+        {
+            SessionId = sessionId;
+            Login = login;
+            Parental = parental;
+            SteamId = System.Text.RegularExpressions.Regex.Match(WebUtility.UrlDecode(login),
+                @"\A[0-9]{17}(?=\||\z)").Value;
+        }
+    }
+
     internal class SteamProfile
     {
-        internal static string GetSteamId()
-        {
-            if (SteamBrowserSession.Active != null) return SteamBrowserSession.Active.SteamId;
-            var value = WebUtility.UrlDecode(Settings.Default.steamLoginSecure ?? "");
-            var match = System.Text.RegularExpressions.Regex.Match(value, @"\A[0-9]{17}(?=\||\z)");
-            return match.Value;
-        }
-
-        internal static string ProfileUrl => SteamBrowserSession.Active?.ProfileUrl ?? Settings.Default.myProfileURL;
-        internal static bool HasSession => SteamBrowserSession.Active != null ||
-            (!string.IsNullOrWhiteSpace(Settings.Default.sessionid) && !string.IsNullOrWhiteSpace(Settings.Default.steamLoginSecure));
-
-        internal static string GetSteamUrl()
-        {
-            return "https://steamcommunity.com/profiles/" + GetSteamId();
-        }
+        internal static string GetSteamId() => SteamBrowserSession.Active?.SteamId ?? ManualSession.Current?.SteamId;
+        internal static string ProfileUrl => SteamBrowserSession.Active?.ProfileUrl ?? ManualSession.Current?.Url;
+        internal static bool HasSession => SteamBrowserSession.Active != null || ManualSession.Current != null;
 
         internal static async Task<string> GetSignedAsAsync()
         {
-            var steamUrl = GetSteamUrl();
+            var steamUrl = ProfileUrl;
             var userName = "User " + GetSteamId();
             try
             {
@@ -43,8 +46,7 @@ namespace IdleMasterExtended
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                Logger.Exception(ex, "frmMain -> GetSignedAs, for steamUrl = " + steamUrl);
+                Logger.Exception(ex, "Could not read Steam profile name.");
             }
             return localization.strings.signed_in_as + " " + userName;
         }

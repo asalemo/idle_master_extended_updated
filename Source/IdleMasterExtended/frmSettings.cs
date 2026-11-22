@@ -243,8 +243,7 @@ namespace IdleMasterExtended
                 Logger.Report(localization.strings.ResourceManager.GetString("sign_out_before_edit"));
                 return;
             }
-            var frm = new frmSettingsAdvanced();
-            frm.ShowDialog();
+            using (var form = new frmSettingsAdvanced()) form.ShowDialog(this);
         }
 
         private void darkThemeCheckBox_CheckedChanged(object sender, EventArgs e)
