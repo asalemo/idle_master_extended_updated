@@ -23,6 +23,10 @@ La connexion Steam, le test d’un jeu et les diagnostics sont disponibles en fr
 
 Les versions publiées pour ce fork figurent sur la [page des versions](https://github.com/asalemo/idle_master_extended_updated/releases). Pour tester une modification présente uniquement sur la branche `develop`, compile cette branche.
 
+## File automatique sur develop
+
+Quand un seul jeu est actif et que les vérifications réussies indiquent le même nombre positif de cartes pendant deux heures, la file passe au jeu suivant lors de la vérification. Diagnostics indique le jeu, le compteur et la durée. Le jeu reporté reste dans la file. Si lui seul est admissible, il reste actif. Une variation du compteur, une lecture en échec ou une pause remet la durée à zéro.
+
 ## Fonctionnement du mode rapide
 
 - Si plusieurs jeux ont moins de deux heures enregistrées et qu’aucun jeu admissible n’a atteint ce seuil, le programme les lance en parallèle, dans la limite de 30. Il vérifie leur progression toutes les cinq minutes.

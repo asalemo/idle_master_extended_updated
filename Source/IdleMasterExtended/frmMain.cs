@@ -223,29 +223,71 @@ namespace IdleMasterExtended
             }
         }
 
+        private readonly Stopwatch sessionClock = Stopwatch.StartNew();
+        private readonly DropProgress dropProgress = new DropProgress();
+        private readonly List<int> deferredGames = new List<int>();
+
+        private List<Badge> QueueCandidates()
+        {
+            var eligible = CanIdleBadges.ToList();
+            if (deferredGames.Count == 0) return eligible;
+            var fresh = eligible.Where(b => !deferredGames.Contains(b.AppId)).ToList();
+            if (fresh.Count > 0) return fresh;
+            // Revisit deferred titles in the order they stalled.
+            return eligible.OrderBy(b => deferredGames.IndexOf(b.AppId)).Take(1).ToList();
+        }
+
         public async Task CheckCardDrops(Badge badge)
         {
             int session = idleSession;
             bool? hasDrops = await badge.CanCardDrops();
-            if (session != idleSession) return;
+            if (session != idleSession || CurrentBadge != badge) return;
             if (!hasDrops.HasValue)
             {
+                dropProgress.Reset();
                 TimeLeft = 60;
                 return;
             }
             if (!hasDrops.Value)
-                NextIdle();
-            else
             {
-                // Resets the clock based on the number of remaining drops
-                TimeLeft = badge.RemainingCard == 1 ? 300 : 900;
+                NextIdle();
+                return;
             }
+            if (TryAdvanceStalledGame(badge)) return;
+            TimeLeft = badge.RemainingCard == 1 ? 300 : 900;
 
             lblCurrentRemaining.Text = badge.RemainingCard == -1 ? "" : badge.RemainingCard + " " + localization.strings.card_drops_remaining;
             pbIdle.Maximum = CardsRemaining > pbIdle.Maximum ? CardsRemaining : pbIdle.Maximum;
             pbIdle.Value = pbIdle.Maximum - CardsRemaining;
             lblHoursPlayed.Text = badge.HoursPlayed + " " + localization.strings.hrs_on_record;
             UpdateStateInfo();
+        }
+
+        private bool TryAdvanceStalledGame(Badge badge)
+        {
+            if (!badge.SteamReady || !badge.InIdle)
+            {
+                dropProgress.Reset();
+                return false;
+            }
+
+            var elapsed = dropProgress.Observe(badge.RemainingCard, sessionClock.Elapsed);
+            if (!elapsed.HasValue) return false;
+            bool rotate = CanIdleBadges.Any(b => b.AppId != badge.AppId);
+            if (rotate || !dropProgress.Reported)
+            {
+                var key = rotate ? "cards_stalled_next" : "cards_stalled_only";
+                string message = string.Format(localization.strings.ResourceManager.GetString(key),
+                    badge.RemainingCard, (int)elapsed.Value.TotalHours, elapsed.Value.Minutes);
+                RecordDiagnostic(badge, message, 1, allowRetry: false);
+                dropProgress.Reported = true;
+            }
+            if (!rotate) return false;
+
+            deferredGames.Remove(badge.AppId);
+            deferredGames.Add(badge.AppId);
+            NextIdle();
+            return true;
         }
 
         private void ResetRetryCountAndUpdateApplicationState()
@@ -333,7 +375,8 @@ namespace IdleMasterExtended
                     return;
                 }
 
-                if (CanIdleBadges.Any())
+                var candidates = QueueCandidates();
+                if (candidates.Count > 0)
                 {
                     EnableCardDropCheckTimer();
                     lblCurrentStatus.Enabled = false;
@@ -343,24 +386,24 @@ namespace IdleMasterExtended
 
                     if (Settings.Default.OnlyOneGameIdle)
                     {
-                        StartSoloIdle(CanIdleBadges.First());
+                        StartSoloIdle(candidates.First());
                     }
                     else
                     {
-                        var ready = CanIdleBadges.FirstOrDefault(b => b.HoursPlayed >= 2);
+                        var ready = candidates.FirstOrDefault(b => b.HoursPlayed >= 2);
                         if (Settings.Default.fastMode)
                         {
-                            if (ready != null || GamesRemaining == 1)
-                                StartSoloIdle(ready ?? CanIdleBadges.First());
+                            if (ready != null || candidates.Count == 1)
+                                StartSoloIdle(ready ?? candidates.First());
                             else
                                 StartMultipleIdle();
                         }
                         else if (Settings.Default.OneThenMany && ready != null)
                             StartSoloIdle(ready);
-                        else if (Settings.Default.OneThenMany || CanIdleBadges.Count(b => b.HoursPlayed < 2) >= 2)
+                        else if (Settings.Default.OneThenMany || candidates.Count(b => b.HoursPlayed < 2) >= 2)
                             StartMultipleIdle();
                         else
-                            StartSoloIdle(CanIdleBadges.First());
+                            StartSoloIdle(candidates.First());
                     }
                 }
                 else
@@ -375,6 +418,7 @@ namespace IdleMasterExtended
         public void StopIdle()
         {
             idleSession++;
+            dropProgress.Reset();
             firstHelperClock.Reset();
             helperMonitor.Stop();
             desiredHelpers.Clear();
@@ -509,6 +553,7 @@ namespace IdleMasterExtended
             badge.Idle(this, (code, detail) =>
             {
                 if (Disposing || IsDisposed || session != idleSession || !desiredHelpers.Contains(badge)) return;
+                if (badge == CurrentBadge) dropProgress.Reset();
                 retryAt[badge] = DateTime.UtcNow.AddMinutes(1);
                 RecordHelperFailure(badge, code, detail);
                 UpdateStateInfo();
@@ -544,7 +589,7 @@ namespace IdleMasterExtended
             RecordDiagnostic(badge, reason, 1);
         }
 
-        private void RecordDiagnostic(Badge badge, string reason, int occurrences)
+        private void RecordDiagnostic(Badge badge, string reason, int occurrences, bool allowRetry = true)
         {
             int appId = badge == null ? 0 : badge.AppId;
             var item = diagnostics.DropDownItems.OfType<DiagnosticItem>()
@@ -552,7 +597,7 @@ namespace IdleMasterExtended
             if (item == null)
             {
                 item = new DiagnosticItem { AppId = appId, Reason = reason };
-                if (badge != null)
+                if (badge != null && allowRetry)
                 {
                     var retry = item.DropDownItems.Add(localization.strings.ResourceManager.GetString("helper_retry_now"));
                     item.DropDownOpening += (sender, args) => retry.Enabled = retryAt.ContainsKey(badge);
@@ -590,6 +635,7 @@ namespace IdleMasterExtended
         {
             // Set the currentAppID value
             foreach (var previous in desiredHelpers.Where(b => b != badge).ToList()) ForgetHelper(previous);
+            if (CurrentBadge != badge) dropProgress.Reset();
             CurrentBadge = badge;
 
             // Place user "In game" for card drops
@@ -636,6 +682,7 @@ namespace IdleMasterExtended
 
         public void StartMultipleIdle()
         {
+            dropProgress.Reset();
             CurrentBadge = null;
             // Start the idling processes
             UpdateIdleProcesses();
@@ -723,7 +770,7 @@ namespace IdleMasterExtended
 
         public void UpdateIdleProcesses()
         {
-            var candidates = CanIdleBadges.Where(b => Settings.Default.IdlingModeWhitelist || b.HoursPlayed < 2).ToList();
+            var candidates = QueueCandidates().Where(b => Settings.Default.IdlingModeWhitelist || b.HoursPlayed < 2).ToList();
             foreach (var badge in desiredHelpers.Where(b => !candidates.Contains(b)).ToList())
                 ForgetHelper(badge);
 
@@ -858,6 +905,7 @@ namespace IdleMasterExtended
         /// </summary>
         private void ResetClientStatus()
         {
+            deferredGames.Clear();
             SteamBrowserSession.Disconnect();
             ManualSession.Current = null;
 
@@ -986,6 +1034,7 @@ namespace IdleMasterExtended
 
         private void frmMain_FormClose(object sender, FormClosedEventArgs e)
         {
+            deferredGames.Clear();
             SteamBrowserSession.Disconnect();
             ManualSession.Current = null;
             StopIdle();
@@ -1393,10 +1442,11 @@ namespace IdleMasterExtended
                         return;
                     }
 
-                    var ready = CanIdleBadges.FirstOrDefault(b => b.HoursPlayed >= 2);
-                    if (Settings.Default.fastMode && (ready != null || GamesRemaining == 1))
+                    var candidates = QueueCandidates();
+                    var ready = candidates.FirstOrDefault(b => b.HoursPlayed >= 2);
+                    if (Settings.Default.fastMode && (ready != null || candidates.Count == 1))
                     {
-                        var next = ready ?? CanIdleBadges.First();
+                        var next = ready ?? candidates.First();
                         StartSoloIdle(next);
                     }
                     else

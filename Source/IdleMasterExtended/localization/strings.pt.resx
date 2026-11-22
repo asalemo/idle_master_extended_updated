@@ -390,4 +390,6 @@ para aceder à sua conta do Steam.</value>
   <data name="shutdown_pending" xml:space="preserve"><value>O computador vai desligar-se. Seleciona Cancelar para o manter ligado.</value></data>
   <data name="session_completed" xml:space="preserve"><value>Sessão concluída</value></data>
   <data name="manual_signin" xml:space="preserve"><value>Introduzir os dados da sessão</value></data>
+  <data name="cards_stalled_next" xml:space="preserve"><value>Cartas restantes: {0}, sem alterações há {1} h {2} min. A passar ao jogo seguinte.</value></data>
+  <data name="cards_stalled_only" xml:space="preserve"><value>Cartas restantes: {0}, sem alterações há {1} h {2} min. Não há outro jogo disponível.</value></data>
 </root>

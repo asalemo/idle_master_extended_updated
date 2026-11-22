@@ -396,4 +396,6 @@ your Steam account.</value>
   <data name="shutdown_pending" xml:space="preserve"><value>Your computer is about to shut down. Select Cancel to keep it running.</value></data>
   <data name="session_completed" xml:space="preserve"><value>Idling completed</value></data>
   <data name="manual_signin" xml:space="preserve"><value>Enter session details manually</value></data>
+  <data name="cards_stalled_next" xml:space="preserve"><value>Card drops remaining: {0}, unchanged for {1} h {2} min. Moving to the next game.</value></data>
+  <data name="cards_stalled_only" xml:space="preserve"><value>Card drops remaining: {0}, unchanged for {1} h {2} min. This is the only eligible game.</value></data>
 </root>

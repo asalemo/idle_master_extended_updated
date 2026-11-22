@@ -390,4 +390,6 @@ um sich bei deinem Steam Account anzumelden!</value>
   <data name="shutdown_pending" xml:space="preserve"><value>Der Computer wird gleich heruntergefahren. Wähle Abbrechen, um ihn eingeschaltet zu lassen.</value></data>
   <data name="session_completed" xml:space="preserve"><value>Sitzung beendet</value></data>
   <data name="manual_signin" xml:space="preserve"><value>Sitzungsdaten manuell eingeben</value></data>
+  <data name="cards_stalled_next" xml:space="preserve"><value>Verbleibende Karten: {0}, unverändert seit {1} Std. {2} Min. Wechsel zum nächsten Spiel.</value></data>
+  <data name="cards_stalled_only" xml:space="preserve"><value>Verbleibende Karten: {0}, unverändert seit {1} Std. {2} Min. Kein weiteres Spiel verfügbar.</value></data>
 </root>

@@ -130,6 +130,7 @@
     <Compile Include="InstalledGames.cs" />
     <Compile Include="InterfaceLanguage.cs" />
     <Compile Include="SteamBrowserSession.cs" />
+    <Compile Include="DropProgress.cs" />
     <Compile Include="Badge.cs" />
     <Compile Include="CookieClient.cs">
       <SubType>Component</SubType>

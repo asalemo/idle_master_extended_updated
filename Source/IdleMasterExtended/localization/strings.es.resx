@@ -390,4 +390,6 @@ tu cuenta de Steam.</value>
   <data name="shutdown_pending" xml:space="preserve"><value>El equipo está a punto de apagarse. Selecciona Cancelar para mantenerlo encendido.</value></data>
   <data name="session_completed" xml:space="preserve"><value>Sesión finalizada</value></data>
   <data name="manual_signin" xml:space="preserve"><value>Introducir los datos de sesión</value></data>
+  <data name="cards_stalled_next" xml:space="preserve"><value>Cartas restantes: {0}, sin cambios durante {1} h {2} min. Se pasa al siguiente juego.</value></data>
+  <data name="cards_stalled_only" xml:space="preserve"><value>Cartas restantes: {0}, sin cambios durante {1} h {2} min. No hay otro juego disponible.</value></data>
 </root>

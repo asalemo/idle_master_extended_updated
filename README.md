@@ -21,6 +21,10 @@ Select **Sign In**, then choose **Sign in with Steam** or **Enter session detail
 In **File → Settings**, choose **Windows language** or a language by its native name, then restart the application.
 Steam sign-in, single-game testing and Diagnostics are available in English, French, German, Spanish, Italian and Portuguese (Portugal and Brazil). Other interface languages use English for missing translations.
 
+## Automatic queue on develop
+
+When idling one game, two hours of successful checks with the same positive card count trigger a switch at the next check. Diagnostics shows the game, remaining count and elapsed time. Deferred games stay eligible for another turn. With only one eligible game, the helper stays active. A change of count, a failed read or a pause resets the observation period.
+
 ## What to expect
 
 Fast mode runs up to 30 eligible games in parallel while they are below two recorded hours. It checks progress every five minutes. Once a game qualifies for individual idling, or only one remains, it stays active between checks.
