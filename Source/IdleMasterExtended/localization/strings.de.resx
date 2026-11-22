@@ -341,4 +341,52 @@ um sich bei deinem Steam Account anzumelden!</value>
   <data name="idle_onethenmany" xml:space="preserve">
     <value>Spiele mit mehr als zwei Stunden Spielzeit einzeln Idlen, danach gleichzeitig</value>
   </data>
+  <data name="add_game_whitelist" xml:space="preserve"><value>Spiel zur Zulassungsliste hinzufügen</value></data>
+  <data name="manage_whitelist" xml:space="preserve"><value>Zulassungsliste verwalten</value></data>
+  <data name="whitelist" xml:space="preserve"><value>&amp;Zulassungsliste</value></data>
+  <data name="helper_launch_failed" xml:space="preserve"><value>steam-idle.exe konnte nicht gestartet werden. {0}</value></data>
+  <data name="helper_steam_failed" xml:space="preserve"><value>Steam konnte nicht initialisiert werden. Prüfe, ob der Steam-Client läuft und du angemeldet bist.</value></data>
+  <data name="helper_library_failed" xml:space="preserve"><value>Die native Steam-Bibliothek konnte nicht geladen werden.</value></data>
+  <data name="helper_invalid_id" xml:space="preserve"><value>Das Hilfsprogramm hat eine ungültige AppID erhalten.</value></data>
+  <data name="helper_closed" xml:space="preserve"><value>Das Fenster des Hilfsprogramms wurde geschlossen.</value></data>
+  <data name="helper_unexpected_exit" xml:space="preserve"><value>Das Hilfsprogramm wurde unerwartet beendet (Code {1}).</value></data>
+  <data name="helper_retry_status" xml:space="preserve"><value>{0} · Neuer Versuch in {1} s (Diagnose)</value></data>
+  <data name="helper_starting" xml:space="preserve"><value>Wird gestartet…</value></data>
+  <data name="helper_retry_now" xml:space="preserve"><value>Jetzt erneut versuchen</value></data>
+  <data name="session_unavailable" xml:space="preserve"><value>Steam Community nicht erreichbar · Neuer Versuch in einer Minute</value></data>
+  <data name="session_try_again" xml:space="preserve"><value>Die Sitzung konnte nicht überprüft werden. Versuche es später erneut.</value></data>
+  <data name="copy_details" xml:space="preserve"><value>Details kopieren</value></data>
+  <data name="clipboard_busy" xml:space="preserve"><value>Die Zwischenablage ist belegt. Versuche es erneut.</value></data>
+  <data name="failure_count" xml:space="preserve"><value>Versuche: {0}</value></data>
+  <data name="test_game" xml:space="preserve"><value>Spiel testen</value></data>
+  <data name="test_search" xml:space="preserve"><value>Installierte Spiele nach Name oder AppID durchsuchen</value></data>
+  <data name="test_scanning" xml:space="preserve"><value>Steam-Bibliotheken werden gelesen…</value></data>
+  <data name="test_scan_failed" xml:space="preserve"><value>Die Steam-Bibliotheken konnten nicht gelesen werden.</value></data>
+  <data name="test_stop" xml:space="preserve"><value>Test beenden</value></data>
+  <data name="test_confirmed" xml:space="preserve"><value>{0} (AppID {1}) — von Steam nach {2:F2} s bestätigt.</value></data>
+  <data name="test_matches" xml:space="preserve"><value>Passende installierte Spiele: {0}</value></data>
+  <data name="test_stopped" xml:space="preserve"><value>Beendet</value></data>
+  <data name="timings" xml:space="preserve"><value>Zeitmessungen</value></data>
+  <data name="timing_pending" xml:space="preserve"><value>Noch keine Messung</value></data>
+  <data name="badge_timing" xml:space="preserve"><value>Seiten: {0} · Steam-Anfragen: {1:F0} ms · Lokale Verarbeitung: {2:F0} ms</value></data>
+  <data name="helper_timing" xml:space="preserve"><value>Erste Bestätigung des Hilfsprogramms: {0}</value></data>
+  <data name="helper_runtime_failure" xml:space="preserve"><value>Das Hilfsprogramm wurde unerwartet beendet. Prüfe das Spiel und versuche es erneut.</value></data>
+  <data name="windows_language" xml:space="preserve"><value>Windows-Sprache</value></data>
+  <data name="browser_signin" xml:space="preserve"><value>Bei Steam anmelden</value></data>
+  <data name="browser_use_account" xml:space="preserve"><value>Dieses Steam-Konto verwenden</value></data>
+  <data name="browser_wait" xml:space="preserve"><value>Melde dich bei Steam an und wähle unten dein Konto aus.</value></data>
+  <data name="browser_unavailable" xml:space="preserve"><value>Die Steam-Anmeldung ist nicht verfügbar. Prüfe die Microsoft Edge WebView2 Runtime oder verwende die manuellen Eingabefelder in den Einstellungen.</value></data>
+  <data name="browser_account" xml:space="preserve"><value>Steam-Konto · {0}</value></data>
+  <data name="sign_out_before_edit" xml:space="preserve"><value>Melde dich ab, bevor du eine andere Steam-Sitzung eingibst.</value></data>
+  <data name="manual_fields_help" xml:space="preserve"><value>Hilfe zur Sitzung</value></data>
+  <data name="diagnostics_title" xml:space="preserve"><value>Diagnose</value></data>
+  <data name="only_played" xml:space="preserve"><value>Nur bereits gespielte Spiele</value></data>
+  <data name="shutdown_after" xml:space="preserve"><value>Windows danach herunterfahren</value></data>
+  <data name="prevent_sleep" xml:space="preserve"><value>Ruhezustand verhindern</value></data>
+  <data name="whitelist_mode" xml:space="preserve"><value>Nur zugelassene Spiele (Menü Datei)</value></data>
+  <data name="fast_mode" xml:space="preserve"><value>Schnellmodus (empfohlen)</value></data>
+  <data name="confirm_shutdown" xml:space="preserve"><value>Windows nach dieser Sitzung herunterfahren? Die Einstellung gilt einmalig.</value></data>
+  <data name="shutdown_title" xml:space="preserve"><value>Windows herunterfahren</value></data>
+  <data name="shutdown_pending" xml:space="preserve"><value>Der Computer wird gleich heruntergefahren. Wähle Abbrechen, um ihn eingeschaltet zu lassen.</value></data>
+  <data name="session_completed" xml:space="preserve"><value>Sitzung beendet</value></data>
 </root>

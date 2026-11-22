@@ -9,6 +9,7 @@ Ce fork Windows d’Idle Master Extended repère les jeux de ta bibliothèque St
 Dans la version compilée depuis cette branche, clique sur **Se connecter**, connecte-toi sur la page officielle de Steam, puis choisis **Utiliser ce compte Steam**. La fenêtre affiche le SteamID public du compte. La connexion privée via Microsoft Edge WebView2 dure jusqu’à la déconnexion ou à la fermeture de l’application. Les champs manuels restent accessibles dans les paramètres. La RC2 utilise encore le parcours manuel.
 
 Dans **Fichier → Réglages**, choisis **Langue de Windows** ou le nom d’une langue, puis redémarre l’application.
+La connexion Steam, le test d’un jeu et les diagnostics sont disponibles en français, anglais, allemand, espagnol, italien et portugais (Portugal et Brésil). Pour les autres langues de l’interface, les textes qui restent à traduire s’affichent en anglais.
 
 ## Utilisation
 

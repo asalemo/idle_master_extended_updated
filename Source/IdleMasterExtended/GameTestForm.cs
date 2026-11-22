@@ -75,7 +75,7 @@ namespace IdleMasterExtended
                 {
                     if (IsDisposed || active != badge) return;
                     recordFailure(badge, code, detail);
-                    Finish(badge.Name + " — Diagnostics");
+                    Finish(badge.Name + " — " + T("diagnostics_title"));
                 });
             };
             monitor.Tick += (s, e) =>

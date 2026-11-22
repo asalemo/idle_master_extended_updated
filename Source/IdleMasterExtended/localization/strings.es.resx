@@ -341,4 +341,52 @@ tu cuenta de Steam.</value>
   <data name="idle_onethenmany" xml:space="preserve">
     <value>"Idlea" juegos con más de 2 horas individualmente, luego simultáneamente</value>
   </data>
+  <data name="add_game_whitelist" xml:space="preserve"><value>Añadir juego a la lista de permitidos</value></data>
+  <data name="manage_whitelist" xml:space="preserve"><value>Administrar la lista de permitidos</value></data>
+  <data name="whitelist" xml:space="preserve"><value>&amp;Lista de permitidos</value></data>
+  <data name="helper_launch_failed" xml:space="preserve"><value>No se pudo iniciar steam-idle.exe. {0}</value></data>
+  <data name="helper_steam_failed" xml:space="preserve"><value>No se pudo inicializar Steam. Comprueba que el cliente de Steam esté abierto y que hayas iniciado sesión.</value></data>
+  <data name="helper_library_failed" xml:space="preserve"><value>No se pudo cargar la biblioteca nativa de Steam.</value></data>
+  <data name="helper_invalid_id" xml:space="preserve"><value>El proceso auxiliar recibió un AppID no válido.</value></data>
+  <data name="helper_closed" xml:space="preserve"><value>Se cerró la ventana del proceso auxiliar.</value></data>
+  <data name="helper_unexpected_exit" xml:space="preserve"><value>El proceso auxiliar se cerró de forma inesperada (código {1}).</value></data>
+  <data name="helper_retry_status" xml:space="preserve"><value>{0} · Nuevo intento en {1} s (Diagnóstico)</value></data>
+  <data name="helper_starting" xml:space="preserve"><value>Iniciando…</value></data>
+  <data name="helper_retry_now" xml:space="preserve"><value>Reintentar ahora</value></data>
+  <data name="session_unavailable" xml:space="preserve"><value>La Comunidad Steam no está disponible · Nuevo intento en un minuto</value></data>
+  <data name="session_try_again" xml:space="preserve"><value>No se pudo verificar la sesión. Vuelve a intentarlo más tarde.</value></data>
+  <data name="copy_details" xml:space="preserve"><value>Copiar detalles</value></data>
+  <data name="clipboard_busy" xml:space="preserve"><value>El portapapeles está ocupado. Vuelve a intentarlo.</value></data>
+  <data name="failure_count" xml:space="preserve"><value>Intentos: {0}</value></data>
+  <data name="test_game" xml:space="preserve"><value>Probar un juego</value></data>
+  <data name="test_search" xml:space="preserve"><value>Buscar juegos instalados por nombre o AppID</value></data>
+  <data name="test_scanning" xml:space="preserve"><value>Leyendo las bibliotecas de Steam…</value></data>
+  <data name="test_scan_failed" xml:space="preserve"><value>No se pudieron leer las bibliotecas de Steam.</value></data>
+  <data name="test_stop" xml:space="preserve"><value>Detener la prueba</value></data>
+  <data name="test_confirmed" xml:space="preserve"><value>{0} (AppID {1}) — Steam confirmó la actividad en {2:F2} s.</value></data>
+  <data name="test_matches" xml:space="preserve"><value>Juegos instalados que coinciden: {0}</value></data>
+  <data name="test_stopped" xml:space="preserve"><value>Detenido</value></data>
+  <data name="timings" xml:space="preserve"><value>Tiempos</value></data>
+  <data name="timing_pending" xml:space="preserve"><value>Aún no hay mediciones</value></data>
+  <data name="badge_timing" xml:space="preserve"><value>Páginas: {0} · Solicitudes a Steam: {1:F0} ms · Procesamiento local: {2:F0} ms</value></data>
+  <data name="helper_timing" xml:space="preserve"><value>Primera confirmación del proceso auxiliar: {0}</value></data>
+  <data name="helper_runtime_failure" xml:space="preserve"><value>El proceso auxiliar se detuvo de forma inesperada. Comprueba el juego y vuelve a intentarlo.</value></data>
+  <data name="windows_language" xml:space="preserve"><value>Idioma de Windows</value></data>
+  <data name="browser_signin" xml:space="preserve"><value>Iniciar sesión en Steam</value></data>
+  <data name="browser_use_account" xml:space="preserve"><value>Usar esta cuenta de Steam</value></data>
+  <data name="browser_wait" xml:space="preserve"><value>Inicia sesión en Steam y selecciona tu cuenta abajo.</value></data>
+  <data name="browser_unavailable" xml:space="preserve"><value>El inicio de sesión en Steam no está disponible. Comprueba Microsoft Edge WebView2 Runtime o introduce los datos manualmente en los ajustes.</value></data>
+  <data name="browser_account" xml:space="preserve"><value>Cuenta de Steam · {0}</value></data>
+  <data name="sign_out_before_edit" xml:space="preserve"><value>Cierra la sesión antes de introducir los datos de otra sesión de Steam.</value></data>
+  <data name="manual_fields_help" xml:space="preserve"><value>Ayuda sobre la sesión</value></data>
+  <data name="diagnostics_title" xml:space="preserve"><value>Diagnóstico</value></data>
+  <data name="only_played" xml:space="preserve"><value>Solo juegos jugados anteriormente</value></data>
+  <data name="shutdown_after" xml:space="preserve"><value>Apagar Windows al terminar</value></data>
+  <data name="prevent_sleep" xml:space="preserve"><value>Evitar que Windows entre en suspensión</value></data>
+  <data name="whitelist_mode" xml:space="preserve"><value>Solo juegos permitidos (menú Archivo)</value></data>
+  <data name="fast_mode" xml:space="preserve"><value>Modo rápido (recomendado)</value></data>
+  <data name="confirm_shutdown" xml:space="preserve"><value>¿Apagar Windows al terminar esta sesión? Este ajuste se aplica una sola vez.</value></data>
+  <data name="shutdown_title" xml:space="preserve"><value>Apagar Windows</value></data>
+  <data name="shutdown_pending" xml:space="preserve"><value>El equipo está a punto de apagarse. Selecciona Cancelar para mantenerlo encendido.</value></data>
+  <data name="session_completed" xml:space="preserve"><value>Sesión finalizada</value></data>
 </root>

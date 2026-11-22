@@ -15,6 +15,7 @@ Idle Master checks your Steam badges for remaining trading card drops and starts
 In a build from this branch, select **Sign in**, complete sign-in on Steam’s official page, then select **Use this Steam account**. The window shows your public SteamID. This private Microsoft Edge WebView2 session lasts until sign-out or application exit. Manual session fields remain available in Settings. The RC2 download still uses manual sign-in.
 
 In **File → Settings**, choose **Windows language** or a language by its native name, then restart the application.
+Steam sign-in, single-game testing and Diagnostics are available in English, French, German, Spanish, Italian and Portuguese (Portugal and Brazil). Other interface languages use English for missing translations.
 
 ## What to expect
 

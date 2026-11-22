@@ -339,4 +339,52 @@ Non condividere questa informazione con nessuno, in quanto potrebbe essere utili
   <data name="idle_onethenmany" xml:space="preserve">
     <value>Metti i giochi in idle singolarmente per 2 ore, dopodichè simultaneamente</value>
   </data>
+  <data name="add_game_whitelist" xml:space="preserve"><value>Aggiungi il gioco all’elenco dei giochi consentiti</value></data>
+  <data name="manage_whitelist" xml:space="preserve"><value>Gestisci l’elenco dei giochi consentiti</value></data>
+  <data name="whitelist" xml:space="preserve"><value>&amp;Giochi consentiti</value></data>
+  <data name="helper_launch_failed" xml:space="preserve"><value>Impossibile avviare steam-idle.exe. {0}</value></data>
+  <data name="helper_steam_failed" xml:space="preserve"><value>Impossibile inizializzare Steam. Verifica che il client di Steam sia aperto e che tu abbia effettuato l’accesso.</value></data>
+  <data name="helper_library_failed" xml:space="preserve"><value>Impossibile caricare la libreria nativa di Steam.</value></data>
+  <data name="helper_invalid_id" xml:space="preserve"><value>Il processo ausiliario ha ricevuto un AppID non valido.</value></data>
+  <data name="helper_closed" xml:space="preserve"><value>La finestra del processo ausiliario è stata chiusa.</value></data>
+  <data name="helper_unexpected_exit" xml:space="preserve"><value>Il processo ausiliario si è chiuso in modo imprevisto (codice {1}).</value></data>
+  <data name="helper_retry_status" xml:space="preserve"><value>{0} · Nuovo tentativo tra {1} s (Diagnostica)</value></data>
+  <data name="helper_starting" xml:space="preserve"><value>Avvio in corso…</value></data>
+  <data name="helper_retry_now" xml:space="preserve"><value>Riprova ora</value></data>
+  <data name="session_unavailable" xml:space="preserve"><value>Comunità di Steam non disponibile · Nuovo tentativo tra un minuto</value></data>
+  <data name="session_try_again" xml:space="preserve"><value>Impossibile verificare la sessione. Riprova più tardi.</value></data>
+  <data name="copy_details" xml:space="preserve"><value>Copia dettagli</value></data>
+  <data name="clipboard_busy" xml:space="preserve"><value>Gli appunti sono occupati. Riprova.</value></data>
+  <data name="failure_count" xml:space="preserve"><value>Tentativi: {0}</value></data>
+  <data name="test_game" xml:space="preserve"><value>Prova un gioco</value></data>
+  <data name="test_search" xml:space="preserve"><value>Cerca i giochi installati per nome o AppID</value></data>
+  <data name="test_scanning" xml:space="preserve"><value>Lettura delle librerie di Steam…</value></data>
+  <data name="test_scan_failed" xml:space="preserve"><value>Impossibile leggere le librerie di Steam.</value></data>
+  <data name="test_stop" xml:space="preserve"><value>Interrompi la prova</value></data>
+  <data name="test_confirmed" xml:space="preserve"><value>{0} (AppID {1}) — Steam ha confermato l’attività in {2:F2} s.</value></data>
+  <data name="test_matches" xml:space="preserve"><value>Giochi installati corrispondenti: {0}</value></data>
+  <data name="test_stopped" xml:space="preserve"><value>Interrotto</value></data>
+  <data name="timings" xml:space="preserve"><value>Tempi misurati</value></data>
+  <data name="timing_pending" xml:space="preserve"><value>Nessuna misurazione disponibile</value></data>
+  <data name="badge_timing" xml:space="preserve"><value>Pagine: {0} · Richieste a Steam: {1:F0} ms · Elaborazione locale: {2:F0} ms</value></data>
+  <data name="helper_timing" xml:space="preserve"><value>Prima conferma del processo ausiliario: {0}</value></data>
+  <data name="helper_runtime_failure" xml:space="preserve"><value>Il processo ausiliario si è interrotto in modo imprevisto. Controlla il gioco e riprova.</value></data>
+  <data name="windows_language" xml:space="preserve"><value>Lingua di Windows</value></data>
+  <data name="browser_signin" xml:space="preserve"><value>Accedi a Steam</value></data>
+  <data name="browser_use_account" xml:space="preserve"><value>Usa questo account Steam</value></data>
+  <data name="browser_wait" xml:space="preserve"><value>Accedi a Steam, poi seleziona il tuo account qui sotto.</value></data>
+  <data name="browser_unavailable" xml:space="preserve"><value>L’accesso a Steam non è disponibile. Controlla Microsoft Edge WebView2 Runtime o usa i campi manuali nelle impostazioni.</value></data>
+  <data name="browser_account" xml:space="preserve"><value>Account Steam · {0}</value></data>
+  <data name="sign_out_before_edit" xml:space="preserve"><value>Esci prima di inserire i dati di un’altra sessione Steam.</value></data>
+  <data name="manual_fields_help" xml:space="preserve"><value>Guida alla sessione</value></data>
+  <data name="diagnostics_title" xml:space="preserve"><value>Diagnostica</value></data>
+  <data name="only_played" xml:space="preserve"><value>Solo giochi già avviati</value></data>
+  <data name="shutdown_after" xml:space="preserve"><value>Spegni Windows al termine</value></data>
+  <data name="prevent_sleep" xml:space="preserve"><value>Impedisci la sospensione di Windows</value></data>
+  <data name="whitelist_mode" xml:space="preserve"><value>Solo giochi consentiti (menu File)</value></data>
+  <data name="fast_mode" xml:space="preserve"><value>Modalità rapida (consigliata)</value></data>
+  <data name="confirm_shutdown" xml:space="preserve"><value>Spegnere Windows al termine della sessione? Questa impostazione vale una sola volta.</value></data>
+  <data name="shutdown_title" xml:space="preserve"><value>Spegni Windows</value></data>
+  <data name="shutdown_pending" xml:space="preserve"><value>Il computer sta per spegnersi. Seleziona Annulla per tenerlo acceso.</value></data>
+  <data name="session_completed" xml:space="preserve"><value>Sessione terminata</value></data>
 </root>

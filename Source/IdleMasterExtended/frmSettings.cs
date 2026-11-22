@@ -120,6 +120,12 @@ namespace IdleMasterExtended
             radIdleLeastDrops.Text = localization.strings.order_least;
             ttHints.SetToolTip(radIdleLeastDrops, localization.strings.order_least);
             lblLanguage.Text = localization.strings.interface_language;
+            var resources = localization.strings.ResourceManager;
+            chkIdleOnlyPlayed.Text = resources.GetString("only_played");
+            chkShutdown.Text = resources.GetString("shutdown_after");
+            chkPreventSleep.Text = resources.GetString("prevent_sleep");
+            radWhitelistMode.Text = resources.GetString("whitelist_mode");
+            radFastMode.Text = resources.GetString("fast_mode");
 
             if (Settings.Default.fastMode)
             {
@@ -252,8 +258,8 @@ namespace IdleMasterExtended
         {
             if (chkShutdown.Checked)
             {
-                if (MessageBox.Show("Are you sure you want Idle Master Extended to shutdown Windows when idling is done?\n\nNote: This setting will only be active once.",
-                                    "Shutdown Windows", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+                if (MessageBox.Show(localization.strings.ResourceManager.GetString("confirm_shutdown"),
+                                    localization.strings.ResourceManager.GetString("shutdown_title"), MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                 {
                     Settings.Default.ShutdownWindowsOnDone = chkShutdown.Checked;
                 }

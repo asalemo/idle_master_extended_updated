@@ -582,7 +582,7 @@ namespace IdleMasterExtended
             string source = badge == null ? "" : $"{badge} (AppID {appId}) — ";
             item.Text = $"{DateTime.Now:T}  {source}{reason} ({attempts})";
             diagnostics.DropDownItems.Insert(0, item);
-            diagnostics.Text = $"Diagnostics ({diagnostics.DropDownItems.Count})";
+            diagnostics.Text = localization.strings.ResourceManager.GetString("diagnostics_title") + $" ({diagnostics.DropDownItems.Count})";
             diagnostics.Visible = true;
         }
 
@@ -693,8 +693,8 @@ namespace IdleMasterExtended
 
                 StartShutdownProcess();
 
-                if (MessageBox.Show("Your computer is about to shut down.\n\nNote: Press Cancel to abort.",
-                                    "Idling Completed", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                if (MessageBox.Show(localization.strings.ResourceManager.GetString("shutdown_pending"),
+                                    localization.strings.ResourceManager.GetString("session_completed"), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
                 {
                     AbortShutdownProcess();
                 }

@@ -385,4 +385,14 @@ your Steam account.</value>
   <data name="browser_account" xml:space="preserve"><value>Steam account · {0}</value></data>
   <data name="sign_out_before_edit" xml:space="preserve"><value>Sign out before entering a different Steam session.</value></data>
   <data name="manual_fields_help" xml:space="preserve"><value>Session help</value></data>
+  <data name="diagnostics_title" xml:space="preserve"><value>Diagnostics</value></data>
+  <data name="only_played" xml:space="preserve"><value>Idle only previously played games</value></data>
+  <data name="shutdown_after" xml:space="preserve"><value>Shut down Windows when finished</value></data>
+  <data name="prevent_sleep" xml:space="preserve"><value>Prevent Windows from sleeping</value></data>
+  <data name="whitelist_mode" xml:space="preserve"><value>Allowed games only (see File menu)</value></data>
+  <data name="fast_mode" xml:space="preserve"><value>Fast mode (recommended)</value></data>
+  <data name="confirm_shutdown" xml:space="preserve"><value>Shut down Windows when idling finishes? This setting applies once.</value></data>
+  <data name="shutdown_title" xml:space="preserve"><value>Shut down Windows</value></data>
+  <data name="shutdown_pending" xml:space="preserve"><value>Your computer is about to shut down. Select Cancel to keep it running.</value></data>
+  <data name="session_completed" xml:space="preserve"><value>Idling completed</value></data>
 </root>

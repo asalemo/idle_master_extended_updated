@@ -384,4 +384,14 @@ celles-ci peuvent être utilisées par un pirate pour se connecter à votre comp
   <data name="browser_account" xml:space="preserve"><value>Compte Steam · {0}</value></data>
   <data name="sign_out_before_edit" xml:space="preserve"><value>Déconnecte-toi avant de saisir une autre session Steam.</value></data>
   <data name="manual_fields_help" xml:space="preserve"><value>Aide à la connexion</value></data>
+  <data name="diagnostics_title" xml:space="preserve"><value>Diagnostics</value></data>
+  <data name="only_played" xml:space="preserve"><value>Jeux déjà joués uniquement</value></data>
+  <data name="shutdown_after" xml:space="preserve"><value>Éteindre Windows à la fin</value></data>
+  <data name="prevent_sleep" xml:space="preserve"><value>Empêcher la mise en veille</value></data>
+  <data name="whitelist_mode" xml:space="preserve"><value>Jeux autorisés uniquement (menu Fichier)</value></data>
+  <data name="fast_mode" xml:space="preserve"><value>Mode rapide (recommandé)</value></data>
+  <data name="confirm_shutdown" xml:space="preserve"><value>Éteindre Windows à la fin de cette session ? Ce réglage ne s’applique qu’une fois.</value></data>
+  <data name="shutdown_title" xml:space="preserve"><value>Éteindre Windows</value></data>
+  <data name="shutdown_pending" xml:space="preserve"><value>Ton ordinateur va s’éteindre. Clique sur Annuler pour le garder allumé.</value></data>
+  <data name="session_completed" xml:space="preserve"><value>Session terminée</value></data>
 </root>

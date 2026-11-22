@@ -141,7 +141,7 @@ namespace IdleMasterExtended
             txtSessionID.Enabled = txtSteamLoginSecure.Enabled = txtSteamParental.Enabled = true;
             btnUpdate.Text = localization.strings.update;
             btnUpdate.Enabled = true;
-            ttHelp.SetToolTip(btnUpdate, "Diagnostics");
+            ttHelp.SetToolTip(btnUpdate, localization.strings.ResourceManager.GetString("diagnostics_title"));
             Logger.Report(status == SessionStatus.Expired ? localization.strings.validate_failed :
                 localization.strings.ResourceManager.GetString("session_try_again"));
         }
