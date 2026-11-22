@@ -22,6 +22,8 @@ Les versions publiées pour ce fork figurent sur la [page des versions](https://
 
 **Fichier → Tester un jeu** recherche les titres installés. Le démarrage du test suspend la file automatique. Arrête le test ou ferme sa fenêtre, puis reprends la file quand tu le souhaites. **Fichier → Temps mesurés** affiche les délais. Les erreurs répétées sont regroupées dans **Diagnostics** et le programme auxiliaire fonctionne sans fenêtre.
 
+Guides en anglais · [Tester un seul jeu](https://github.com/asalemo/idle_master_extended_updated/wiki/Test-a-single-game) · [Lire les erreurs dans Diagnostics](https://github.com/asalemo/idle_master_extended_updated/wiki/Diagnostics-and-recovery)
+
 ## Diagnostic des fermetures
 
 Si un programme auxiliaire se ferme de lui-même ou ne démarre pas, ouvre le menu **Diagnostics** qui apparaît dans la fenêtre principale. Chaque entrée indique l’heure, le jeu, son AppID et le motif disponible. Une initialisation Steam refusée, une bibliothèque native manquante et une fermeture avec un code inconnu ont des messages distincts. Les arrêts demandés par Idle Master (pause ou changement de jeu) ne sont pas signalés. Le menu conserve les 50 derniers problèmes distincts de la session.

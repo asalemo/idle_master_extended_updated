@@ -22,6 +22,8 @@ The profile name and orphan-process cleanup run in the background. An unreadable
 
 Open **File → Test a game** to search installed titles. Starting a test pauses the automatic queue. Stop the test or close its window, then resume the queue when ready. **File → Timings** shows the last badge request and processing times and the first helper confirmation. Repeated failures are grouped in **Diagnostics**, with retry and copy actions. Helpers run without a window.
 
+[Test a single game](https://github.com/asalemo/idle_master_extended_updated/wiki/Test-a-single-game) · [Read errors in Diagnostics](https://github.com/asalemo/idle_master_extended_updated/wiki/Diagnostics-and-recovery)
+
 ## Build and contribute
 
 Build the helper first, then the desktop solution in **Release | Any CPU** using Visual Studio with .NET desktop development and the .NET Framework 4.8 targeting pack. The resulting application requires x64 Windows. See the [build guide](https://github.com/asalemo/idle_master_extended_updated/wiki/Building-from-source) for paths, packaging and validation.
