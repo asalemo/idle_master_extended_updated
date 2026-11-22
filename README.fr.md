@@ -1,12 +1,12 @@
 # Idle Master Extended Updated
 
-[English](README.md) · [Télécharger la RC Windows x64](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.2) · [Wiki du fork](https://github.com/asalemo/idle_master_extended_updated/wiki)
+[English](README.md) · [Télécharger la RC Windows x64](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.3) · [Wiki du fork](https://github.com/asalemo/idle_master_extended_updated/wiki)
 
 Ce fork Windows d’Idle Master Extended repère les jeux de ta bibliothèque Steam qui ont encore des cartes à distribuer. Il utilise le programme auxiliaire `steam-idle.exe` pour signaler une activité en jeu à Steam. Steam détermine le moment où les cartes sont distribuées.
 
-## Connexion et langue sur la branche develop
+## Connexion et langue dans la RC3
 
-Dans la version compilée depuis cette branche, clique sur **Se connecter**, connecte-toi sur la page officielle de Steam, puis choisis **Utiliser ce compte Steam**. La fenêtre affiche le SteamID public du compte. La connexion privée via Microsoft Edge WebView2 dure jusqu’à la déconnexion ou à la fermeture de l’application. Les champs manuels restent accessibles dans les paramètres. La RC2 utilise encore le parcours manuel.
+Dans la RC3, clique sur **Se connecter**, connecte-toi sur la page officielle de Steam, puis choisis **Utiliser ce compte Steam**. La fenêtre affiche le SteamID public du compte. La connexion privée via Microsoft Edge WebView2 dure jusqu’à la déconnexion ou à la fermeture de l’application. Les champs manuels restent accessibles dans les paramètres.
 
 Dans **Fichier → Réglages**, choisis **Langue de Windows** ou le nom d’une langue, puis redémarre l’application.
 La connexion Steam, le test d’un jeu et les diagnostics sont disponibles en français, anglais, allemand, espagnol, italien et portugais (Portugal et Brésil). Pour les autres langues de l’interface, les textes qui restent à traduire s’affichent en anglais.
@@ -14,7 +14,7 @@ La connexion Steam, le test d’un jeu et les diagnostics sont disponibles en fr
 ## Utilisation
 
 1. Ouvre le client Steam sur Windows 64 bits et connecte-toi.
-2. Depuis le dossier de la version compilée, lance `IdleMasterExtended.exe`. Garde `steam-idle.exe`, les DLL et le dossier `Languages` à côté de lui.
+2. Après avoir extrait tout le ZIP, lance `IdleMasterExtended.exe`. Garde `steam-idle.exe`, les DLL et les dossiers `Languages` et `runtimes` à côté de lui.
 3. Connecte Idle Master à Steam et choisis un mode dans les paramètres. Le mode « un seul jeu » convient si tu souhaites garder un seul titre actif à la fois.
 
 Les versions publiées pour ce fork figurent sur la [page des versions](https://github.com/asalemo/idle_master_extended_updated/releases). Pour tester une modification présente uniquement sur la branche `develop`, compile cette branche.

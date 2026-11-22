@@ -2,17 +2,17 @@
 
 Idle Master checks your Steam badges for remaining trading card drops and starts a small helper for each selected game. Steam determines when cards drop. This fork targets **Windows x64** and includes changes to game switching, startup responsiveness and session recovery.
 
-[Français](README.fr.md) · [Download the Windows release candidate](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.2) · [User guide](https://github.com/asalemo/idle_master_extended_updated/wiki)
+[Français](README.fr.md) · [Download the Windows release candidate](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.3) · [User guide](https://github.com/asalemo/idle_master_extended_updated/wiki)
 
 ## Get started
 
 1. Download the **win-x64 ZIP** from the release and extract the entire archive. The GitHub source archives are for developers.
-2. Open Steam and sign in. Run `IdleMasterExtended.exe` from the extracted folder with `steam-idle.exe`, the DLLs and `Languages` beside it.
+2. Open Steam and sign in. Run `IdleMasterExtended.exe` from the extracted folder with `steam-idle.exe`, the DLLs, `runtimes` and `Languages` beside it.
 3. Use the sign-in link to configure your Steam Community session. Choose an idling mode in **File → Settings**.
 
-## Sign-in and language on develop
+## Sign-in and language in RC3
 
-In a build from this branch, select **Sign in**, complete sign-in on Steam’s official page, then select **Use this Steam account**. The window shows your public SteamID. This private Microsoft Edge WebView2 session lasts until sign-out or application exit. Manual session fields remain available in Settings. The RC2 download still uses manual sign-in.
+In RC3, select **Sign in**, complete sign-in on Steam’s official page, then select **Use this Steam account**. The window shows your public SteamID. This private Microsoft Edge WebView2 session lasts until sign-out or application exit. Manual session fields remain available in Settings.
 
 In **File → Settings**, choose **Windows language** or a language by its native name, then restart the application.
 Steam sign-in, single-game testing and Diagnostics are available in English, French, German, Spanish, Italian and Portuguese (Portugal and Brazil). Other interface languages use English for missing translations.
