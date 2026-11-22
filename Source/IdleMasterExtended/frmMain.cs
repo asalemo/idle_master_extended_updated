@@ -5,7 +5,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using IdleMaster;
 using System.Management;
+using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -15,7 +17,6 @@ using IdleMasterExtended.Properties;
 using Steamworks;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 using System.Globalization;
-using System.Security.Principal;
 using System.Runtime.InteropServices;
 
 namespace IdleMasterExtended
@@ -48,6 +49,8 @@ namespace IdleMasterExtended
         public frmMain()
         {
             InitializeComponent();
+            diagnostics.Visible = false;
+            mnuTop.Items.Add(diagnostics);
             AllBadges = new List<Badge>();
         }
 
@@ -244,11 +247,17 @@ namespace IdleMasterExtended
         #region IDLING
         private void StartIdle()
         {
-            // Kill all existing processes before starting any new ones
-            // This prevents rogue processes from interfering with idling time and slowing card drops
+            // Mark our own stops before checking for orphaned helpers.
+            foreach (var badge in AllBadges.Where(b => b.InIdle))
+                badge.StopIdle();
+
+            // Clean up orphaned helpers without interrupting another running instance.
             try
             {
                 String username = WindowsIdentity.GetCurrent().Name;
+                int currentPid = Process.GetCurrentProcess().Id;
+                var otherInstances = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName)
+                    .Select(p => p.Id).Where(id => id != currentPid).ToList();
                 foreach (var process in Process.GetProcessesByName("steam-idle"))
                 {
                     ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * From Win32_Process Where ProcessID = " + process.Id);
@@ -256,6 +265,7 @@ namespace IdleMasterExtended
 
                     foreach (ManagementObject obj in processList)
                     {
+                        if (otherInstances.Contains(Convert.ToInt32(obj["ParentProcessId"]))) continue;
                         string[] argList = new string[] { string.Empty, string.Empty };
                         int returnVal = Convert.ToInt32(obj.InvokeMethod("GetOwner", argList));
                         if (returnVal == 0)
@@ -401,13 +411,48 @@ namespace IdleMasterExtended
             }
         }
 
+        private readonly ToolStripMenuItem diagnostics = new ToolStripMenuItem();
+
+        private void StartHelper(Badge badge)
+        {
+            badge.Idle(this, (code, detail) =>
+            {
+                if (Disposing || IsDisposed) return;
+                string key;
+                switch ((HelperExitCode?)code)
+                {
+                    case null: key = "helper_launch_failed"; break;
+                    case HelperExitCode.SteamInitializationFailed: key = "helper_steam_failed"; break;
+                    case HelperExitCode.SteamLibraryUnavailable: key = "helper_library_failed"; break;
+                    case HelperExitCode.InvalidAppId: key = "helper_invalid_id"; break;
+                    case HelperExitCode.Closed: key = "helper_closed"; break;
+                    default: key = "helper_unexpected_exit"; break;
+                }
+
+                var reason = string.Format(localization.strings.ResourceManager.GetString(key), detail, code);
+                string entry = $"{DateTime.Now:T}  {badge} (AppID {badge.AppId}) — {reason}";
+                var item = new ToolStripMenuItem(entry) { AutoToolTip = false };
+                item.Click += (sender, args) => MessageBox.Show(this, entry, "Diagnostics");
+                diagnostics.DropDownItems.Insert(0, item);
+                if (diagnostics.DropDownItems.Count > 50)
+                {
+                    var oldest = diagnostics.DropDownItems[50];
+                    diagnostics.DropDownItems.Remove(oldest);
+                    oldest.Dispose();
+                }
+                diagnostics.Text = $"Diagnostics ({diagnostics.DropDownItems.Count})";
+                diagnostics.Visible = true;
+                UpdateStateInfo();
+            });
+        }
+
         public void StartSoloIdle(Badge badge)
         {
             // Set the currentAppID value
             CurrentBadge = badge;
 
             // Place user "In game" for card drops
-            CurrentBadge.Idle();
+            StartHelper(CurrentBadge);
 
             // Update game name
             lblCurrentStatus.Enabled = false;
@@ -543,7 +588,7 @@ namespace IdleMasterExtended
 
             int slots = Math.Max(0, MaxSimultanousCards - candidates.Count(b => b.InIdle));
             foreach (var badge in candidates.Where(b => !b.InIdle).Take(slots))
-                badge.Idle();
+                StartHelper(badge);
 
             RefreshGamesStateListView();
 
@@ -1212,7 +1257,7 @@ namespace IdleMasterExtended
                 int session = idleSession;
                 if (CurrentBadge != null)
                 {
-                    CurrentBadge.Idle();
+                    StartHelper(CurrentBadge);
                     await CheckCardDrops(CurrentBadge);
                 }
                 else

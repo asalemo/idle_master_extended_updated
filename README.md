@@ -16,6 +16,10 @@ Les versions publiées pour ce fork figurent sur la [page des versions](https://
 - Dès qu’un jeu admissible atteint deux heures, le programme le garde actif seul. S’il ne reste qu’un seul jeu admissible, il passe directement à ce jeu, même sous le seuil. Les deux heures sont un critère de sélection propre au programme.
 - Le mode rapide conserve le jeu sélectionné entre les vérifications. Si Steam est temporairement inaccessible pendant une vérification individuelle, le programme garde le jeu actif et réessaie une minute plus tard.
 
+## Diagnostic des fermetures
+
+Si un programme auxiliaire se ferme de lui-même ou ne démarre pas, ouvre le menu **Diagnostics** qui apparaît dans la fenêtre principale. Chaque entrée indique l’heure, le jeu, son AppID et le motif disponible. Une initialisation Steam refusée, une bibliothèque native manquante et une fermeture avec un code inconnu ont des messages distincts. Les arrêts demandés par Idle Master (pause ou changement de jeu) ne sont pas signalés. Le menu conserve les 50 derniers événements de la session.
+
 ## Changements de ce fork
 
 La rotation qui lançait successivement chaque jeu pendant cinq secondes a été supprimée. La première page des badges est téléchargée une seule fois par lecture. Les bannières des jeux et la vérification de version se chargent en arrière-plan pour laisser l’application démarrer même si ces services sont indisponibles.

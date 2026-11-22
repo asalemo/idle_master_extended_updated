@@ -349,4 +349,10 @@ celles-ci peuvent être utilisées par un pirate pour se connecter à votre comp
   <data name="whitelist" xml:space="preserve">
     <value>&amp;Liste blanche</value>
   </data>
+  <data name="helper_launch_failed" xml:space="preserve"><value>Impossible de lancer steam-idle.exe. {0}</value></data>
+  <data name="helper_steam_failed" xml:space="preserve"><value>Échec de l’initialisation de Steam. Vérifie que le client Steam est ouvert et connecté.</value></data>
+  <data name="helper_library_failed" xml:space="preserve"><value>Impossible de charger la bibliothèque native Steam.</value></data>
+  <data name="helper_invalid_id" xml:space="preserve"><value>Le programme auxiliaire a reçu un AppID invalide.</value></data>
+  <data name="helper_closed" xml:space="preserve"><value>La fenêtre du programme auxiliaire a été fermée.</value></data>
+  <data name="helper_unexpected_exit" xml:space="preserve"><value>Le programme auxiliaire a quitté de façon inattendue (code {1}).</value></data>
 </root>

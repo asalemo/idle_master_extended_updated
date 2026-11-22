@@ -1,5 +1,7 @@
 using System;
 using System.Diagnostics;
+using System.ComponentModel;
+using System.IO;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -31,19 +33,70 @@ namespace IdleMasterExtended
 
         public bool InIdle { get { return idleProcess != null && !idleProcess.HasExited; } }
 
-        public Process Idle()
-        {
-            if (InIdle)
-                return idleProcess;
+        private Action stopCurrentProcess;
 
-            idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", AppId.ToString()) { WindowStyle = ProcessWindowStyle.Hidden });
-            return idleProcess;
+        internal void Idle(ISynchronizeInvoke owner, Action<int?, string> reportExit)
+        {
+            if (InIdle) return;
+
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "steam-idle.exe"), StringId)
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    UseShellExecute = false
+                },
+                SynchronizingObject = owner
+            };
+            bool expectedStop = false;
+            process.Exited += (sender, args) =>
+            {
+                try
+                {
+                    if (!expectedStop) reportExit(process.ExitCode, null);
+                }
+                finally
+                {
+                    if (idleProcess == process)
+                    {
+                        idleProcess = null;
+                        stopCurrentProcess = null;
+                    }
+                    process.Dispose();
+                }
+            };
+
+            try
+            {
+                process.Start();
+            }
+            catch (Win32Exception ex)
+            {
+                process.Dispose();
+                reportExit(null, ex.Message);
+                return;
+            }
+
+            idleProcess = process;
+            stopCurrentProcess = () =>
+            {
+                if (process.HasExited) return;
+                try
+                {
+                    process.Kill();
+                    expectedStop = true;
+                }
+                catch (InvalidOperationException) when (process.HasExited)
+                {
+                    // The helper exited independently before Kill could stop it.
+                }
+            };
+            process.EnableRaisingEvents = true;
         }
 
         public void StopIdle()
         {
-            if (InIdle)
-                idleProcess.Kill();
+            stopCurrentProcess?.Invoke();
         }
 
         public async Task<bool?> CanCardDrops()

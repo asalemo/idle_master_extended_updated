@@ -350,4 +350,10 @@ your Steam account.</value>
   <data name="whitelist" xml:space="preserve">
     <value>&amp;Whitelist</value>
   </data>
+  <data name="helper_launch_failed" xml:space="preserve"><value>Could not start steam-idle.exe. {0}</value></data>
+  <data name="helper_steam_failed" xml:space="preserve"><value>Steam initialization failed. Check that the Steam client is running and signed in.</value></data>
+  <data name="helper_library_failed" xml:space="preserve"><value>The native Steam library could not be loaded.</value></data>
+  <data name="helper_invalid_id" xml:space="preserve"><value>The helper received an invalid AppID.</value></data>
+  <data name="helper_closed" xml:space="preserve"><value>The helper window closed.</value></data>
+  <data name="helper_unexpected_exit" xml:space="preserve"><value>The helper exited unexpectedly (code {1}).</value></data>
 </root>
