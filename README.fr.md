@@ -6,6 +6,8 @@ Ce fork Windows d’Idle Master Extended repère les jeux de ta bibliothèque St
 
 ## Connexion et langue dans la RC3
 
+[Guide RC3 : se connecter à Steam, changer de langue et tester un seul jeu](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas)
+
 Dans la RC3, clique sur **Se connecter**, connecte-toi sur la page officielle de Steam, puis choisis **Utiliser ce compte Steam**. La fenêtre affiche le SteamID public du compte. La connexion privée via Microsoft Edge WebView2 dure jusqu’à la déconnexion ou à la fermeture de l’application. Les champs manuels restent accessibles dans les paramètres.
 
 Dans **Fichier → Réglages**, choisis **Langue de Windows** ou le nom d’une langue, puis redémarre l’application.

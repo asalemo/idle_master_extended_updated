@@ -6,6 +6,8 @@ Idle Master checks your Steam badges for remaining trading card drops and starts
 
 ## Get started
 
+[RC3 guide: sign in to Steam, change language and test one game](https://github.com/asalemo/idle_master_extended_updated/wiki/Getting-started)
+
 1. Download the **win-x64 ZIP** from the release and extract the entire archive. The GitHub source archives are for developers.
 2. Open Steam and sign in. Run `IdleMasterExtended.exe` from the extracted folder with `steam-idle.exe`, the DLLs, `runtimes` and `Languages` beside it.
 3. Use the sign-in link to configure your Steam Community session. Choose an idling mode in **File → Settings**.
