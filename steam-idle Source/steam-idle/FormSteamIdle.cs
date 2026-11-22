@@ -8,7 +8,9 @@ namespace steam_idle
         public FormSteamIdle(long appid)
         {
             InitializeComponent();
-            picApp.Load($"https://cdn.akamai.steamstatic.com/steam/apps/{appid}/header_292x136.jpg");
+            picApp.SizeMode = PictureBoxSizeMode.Zoom;
+            picApp.ErrorImage = null;
+            picApp.ImageLocation = $"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/{appid}/header.jpg";
         }
 
         private void FormSteamIdle_Load(object sender, EventArgs e)

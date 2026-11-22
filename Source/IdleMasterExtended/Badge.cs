@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -46,7 +46,7 @@ namespace IdleMasterExtended
                 idleProcess.Kill();
         }
 
-        public async Task<bool> CanCardDrops()
+        public async Task<bool?> CanCardDrops()
         {
             try
             {
@@ -55,7 +55,7 @@ namespace IdleMasterExtended
                 // Response should be empty. User should be unauthorised.
                 if (string.IsNullOrEmpty(response))
                 {
-                    return false;
+                    return null;
                 }
                 document.LoadHtml(response);
 
@@ -72,7 +72,7 @@ namespace IdleMasterExtended
             {
                 Logger.Exception(ex, "Badge -> CanCardDrops, for id = " + AppId);
             }
-            return false;
+            return null;
         }
 
         public void UpdateStats(string remaining, string hours)
