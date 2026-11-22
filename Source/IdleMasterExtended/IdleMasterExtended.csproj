@@ -126,6 +126,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\steam-idle Source\steam-idle\HelperExitCode.cs"><Link>HelperExitCode.cs</Link></Compile>
+    <Compile Include="GameTestForm.cs" />
+    <Compile Include="InstalledGames.cs" />
     <Compile Include="Badge.cs" />
     <Compile Include="CookieClient.cs">
       <SubType>Component</SubType>

@@ -48,31 +48,34 @@ namespace IdleMasterExtended
                     WindowStyle = ProcessWindowStyle.Hidden,
                     UseShellExecute = false,
                     RedirectStandardOutput = true
-                },
-                SynchronizingObject = owner
+                }
             };
             SteamReady = false;
             process.OutputDataReceived += (sender, args) =>
             {
-                if (args.Data == "READY" && idleProcess == process) SteamReady = true;
+                if (args.Data == "READY")
+                    PostToOwner(owner, () => { if (idleProcess == process) SteamReady = true; });
             };
             bool expectedStop = false;
             process.Exited += (sender, args) =>
             {
-                try
+                if (!PostToOwner(owner, () =>
                 {
-                    if (!expectedStop && idleProcess == process) reportExit(process.ExitCode, null);
-                }
-                finally
-                {
-                    if (idleProcess == process)
+                    try
                     {
-                        SteamReady = false;
-                        idleProcess = null;
-                        stopCurrentProcess = null;
+                        if (!expectedStop && idleProcess == process) reportExit(process.ExitCode, null);
                     }
-                    process.Dispose();
-                }
+                    finally
+                    {
+                        if (idleProcess == process)
+                        {
+                            SteamReady = false;
+                            idleProcess = null;
+                            stopCurrentProcess = null;
+                        }
+                        process.Dispose();
+                    }
+                })) process.Dispose();
             };
 
             try
@@ -102,6 +105,20 @@ namespace IdleMasterExtended
             };
             process.BeginOutputReadLine();
             process.EnableRaisingEvents = true;
+        }
+
+        private static bool PostToOwner(ISynchronizeInvoke owner, Action action)
+        {
+            try
+            {
+                owner.BeginInvoke(action, null);
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                // A test dialog can close before the helper finishes draining stdout.
+                return false;
+            }
         }
 
         public void StopIdle()

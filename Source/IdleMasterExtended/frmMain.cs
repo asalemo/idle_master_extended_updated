@@ -42,6 +42,7 @@ namespace IdleMasterExtended
         public int GamesRemaining { get { return CanIdleBadges.Count(); } }
         public Badge CurrentBadge;
 
+        private bool pausedForTest;
         private int idleSession;
         private bool IsCurrentThemeCustom;
         private bool IsCurrentIconsWhite;
@@ -298,6 +299,7 @@ namespace IdleMasterExtended
 
         private async void StartIdle()
         {
+            if (pausedForTest) return;
             int session = idleSession;
             int request = ++startRequest;
             if (orphanCleanup == null) orphanCleanup = Task.Run((Action)CleanOrphanHelpers);
@@ -989,6 +991,12 @@ namespace IdleMasterExtended
             }
 
             retryHelpers.Text = localization.strings.ResourceManager.GetString("helper_retry_now");
+            fileToolStripMenuItem.DropDownItems.Insert(0, new ToolStripMenuItem(
+                localization.strings.ResourceManager.GetString("test_game"), null, (menu, args) =>
+                {
+                    using (var test = new GameTestForm(PauseForGameTest, RecordHelperFailure))
+                        test.ShowDialog(this);
+                }));
             // Localize form elements
             fileToolStripMenuItem.Text = localization.strings.file;
             gameToolStripMenuItem.Text = localization.strings.game;
@@ -1135,10 +1143,28 @@ namespace IdleMasterExtended
             btnResume.Focus();
         }
 
+        private void PauseForGameTest()
+        {
+            pausedForTest = true;
+            tmrReadyToGo.Stop();
+            tmrBadgeReload.Stop();
+            ReloadCount = 0;
+            StopIdle();
+            lblCurrentStatus.Text = localization.strings.idling_paused;
+            btnResume.Visible = true;
+            resumeIdlingToolStripMenuItem.Enabled = true;
+            pauseIdlingToolStripMenuItem.Enabled = false;
+        }
+
         private void btnResume_Click(object sender, EventArgs e)
         {
-            // Resume idling
-            StartIdle();
+            if (pausedForTest)
+            {
+                pausedForTest = false;
+                tmrReadyToGo.Interval = 100;
+                tmrReadyToGo.Start();
+            }
+            else StartIdle();
 
             pauseIdlingToolStripMenuItem.Enabled = true;
             resumeIdlingToolStripMenuItem.Enabled = false;
@@ -1325,7 +1351,7 @@ namespace IdleMasterExtended
 
         private async void tmrReadyToGo_Tick(object sender, EventArgs e)
         {
-            if (!IsCookieReady || !IsSteamReady)
+            if (pausedForTest || !IsCookieReady || !IsSteamReady)
                 return;
 
             if (Settings.Default.showUsername)

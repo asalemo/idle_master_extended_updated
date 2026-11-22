@@ -363,4 +363,12 @@ celles-ci peuvent être utilisées par un pirate pour se connecter à votre comp
   <data name="copy_details" xml:space="preserve"><value>Copier les détails</value></data>
   <data name="clipboard_busy" xml:space="preserve"><value>Presse-papiers occupé. Réessaie.</value></data>
   <data name="failure_count" xml:space="preserve"><value>Tentatives : {0}</value></data>
+  <data name="test_game" xml:space="preserve"><value>Tester un jeu</value></data>
+  <data name="test_search" xml:space="preserve"><value>Rechercher un titre installé par nom ou AppID</value></data>
+  <data name="test_scanning" xml:space="preserve"><value>Lecture des bibliothèques Steam…</value></data>
+  <data name="test_scan_failed" xml:space="preserve"><value>Impossible de lire les bibliothèques Steam.</value></data>
+  <data name="test_stop" xml:space="preserve"><value>Arrêter le test</value></data>
+  <data name="test_confirmed" xml:space="preserve"><value>{0} (AppID {1}) — Confirmé par Steam en {2:F2} s.</value></data>
+  <data name="test_matches" xml:space="preserve"><value>Titres installés correspondants : {0}</value></data>
+  <data name="test_stopped" xml:space="preserve"><value>Arrêté</value></data>
 </root>
