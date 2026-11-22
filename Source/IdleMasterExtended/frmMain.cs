@@ -1165,7 +1165,7 @@ namespace IdleMasterExtended
 
         private void wikiToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/JonasNilson/idle_master_extended/wiki");
+            Process.Start("https://github.com/asalemo/idle_master_extended_updated/wiki");
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)

@@ -156,7 +156,7 @@ namespace IdleMasterExtended
 
         private void linkLabelWhatIsThis_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/JonasNilson/idle_master_extended/wiki/Login-methods");
+            Process.Start("https://github.com/asalemo/idle_master_extended_updated/wiki/Getting-started");
         }
     }
 }
