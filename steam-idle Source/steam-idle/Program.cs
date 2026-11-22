@@ -26,6 +26,7 @@ namespace steam_idle
                 return (int)HelperExitCode.SteamLibraryUnavailable;
             }
 
+            if (Console.IsOutputRedirected) Console.WriteLine("READY");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormSteamIdle(appId));

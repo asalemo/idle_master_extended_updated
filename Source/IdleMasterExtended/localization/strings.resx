@@ -356,4 +356,7 @@ your Steam account.</value>
   <data name="helper_invalid_id" xml:space="preserve"><value>The helper received an invalid AppID.</value></data>
   <data name="helper_closed" xml:space="preserve"><value>The helper window closed.</value></data>
   <data name="helper_unexpected_exit" xml:space="preserve"><value>The helper exited unexpectedly (code {1}).</value></data>
+  <data name="helper_retry_status" xml:space="preserve"><value>{0} · retry in {1}s (Diagnostics)</value></data>
+  <data name="helper_starting" xml:space="preserve"><value>Starting…</value></data>
+  <data name="helper_retry_now" xml:space="preserve"><value>Retry now</value></data>
 </root>

@@ -355,4 +355,7 @@ celles-ci peuvent être utilisées par un pirate pour se connecter à votre comp
   <data name="helper_invalid_id" xml:space="preserve"><value>Le programme auxiliaire a reçu un AppID invalide.</value></data>
   <data name="helper_closed" xml:space="preserve"><value>La fenêtre du programme auxiliaire a été fermée.</value></data>
   <data name="helper_unexpected_exit" xml:space="preserve"><value>Le programme auxiliaire a quitté de façon inattendue (code {1}).</value></data>
+  <data name="helper_retry_status" xml:space="preserve"><value>{0} · nouvel essai dans {1}s (Diagnostics)</value></data>
+  <data name="helper_starting" xml:space="preserve"><value>Démarrage…</value></data>
+  <data name="helper_retry_now" xml:space="preserve"><value>Réessayer maintenant</value></data>
 </root>

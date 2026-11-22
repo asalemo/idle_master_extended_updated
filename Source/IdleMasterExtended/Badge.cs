@@ -35,6 +35,8 @@ namespace IdleMasterExtended
 
         private Action stopCurrentProcess;
 
+        internal bool SteamReady { get; private set; }
+
         internal void Idle(ISynchronizeInvoke owner, Action<int?, string> reportExit)
         {
             if (InIdle) return;
@@ -44,21 +46,28 @@ namespace IdleMasterExtended
                 StartInfo = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "steam-idle.exe"), StringId)
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
-                    UseShellExecute = false
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true
                 },
                 SynchronizingObject = owner
+            };
+            SteamReady = false;
+            process.OutputDataReceived += (sender, args) =>
+            {
+                if (args.Data == "READY" && idleProcess == process) SteamReady = true;
             };
             bool expectedStop = false;
             process.Exited += (sender, args) =>
             {
                 try
                 {
-                    if (!expectedStop) reportExit(process.ExitCode, null);
+                    if (!expectedStop && idleProcess == process) reportExit(process.ExitCode, null);
                 }
                 finally
                 {
                     if (idleProcess == process)
                     {
+                        SteamReady = false;
                         idleProcess = null;
                         stopCurrentProcess = null;
                     }
@@ -91,6 +100,7 @@ namespace IdleMasterExtended
                     // The helper exited independently before Kill could stop it.
                 }
             };
+            process.BeginOutputReadLine();
             process.EnableRaisingEvents = true;
         }
 

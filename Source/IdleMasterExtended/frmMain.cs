@@ -49,6 +49,16 @@ namespace IdleMasterExtended
         public frmMain()
         {
             InitializeComponent();
+            helperDetails = new ToolTip(components);
+            helperMonitor = new System.Windows.Forms.Timer(components) { Interval = 1000 };
+            helperMonitor.Tick += (sender, args) => RefreshHelpers();
+            retryHelpers.Click += (sender, args) =>
+            {
+                foreach (var badge in retryAt.Keys.ToList()) retryAt[badge] = DateTime.MinValue;
+                RefreshHelpers();
+            };
+            fileToolStripMenuItem.DropDownItems.Add(retryHelpers);
+            retryHelpers.Visible = false;
             diagnostics.Visible = false;
             mnuTop.Items.Add(diagnostics);
             AllBadges = new List<Badge>();
@@ -339,6 +349,10 @@ namespace IdleMasterExtended
         public void StopIdle()
         {
             idleSession++;
+            helperMonitor.Stop();
+            desiredHelpers.Clear();
+            retryAt.Clear();
+            retryHelpers.Visible = false;
             tmrStartNext.Stop();
             try
             {
@@ -413,11 +427,51 @@ namespace IdleMasterExtended
 
         private readonly ToolStripMenuItem diagnostics = new ToolStripMenuItem();
 
+        private readonly ToolTip helperDetails;
+        private readonly System.Windows.Forms.Timer helperMonitor;
+        private readonly HashSet<Badge> desiredHelpers = new HashSet<Badge>();
+        private readonly Dictionary<Badge, DateTime> retryAt = new Dictionary<Badge, DateTime>();
+        private readonly ToolStripMenuItem retryHelpers = new ToolStripMenuItem();
+
+        private void RefreshHelpers()
+        {
+            if (desiredHelpers.Count == 0) return;
+            foreach (var badge in retryAt.Where(p => p.Value <= DateTime.UtcNow).Select(p => p.Key).ToList())
+            {
+                retryAt.Remove(badge);
+                if (desiredHelpers.Contains(badge)) StartHelper(badge);
+            }
+            retryHelpers.Visible = retryAt.Count > 0;
+            int ready = desiredHelpers.Count(b => b.SteamReady && b.InIdle);
+            if (retryAt.Count > 0)
+            {
+                var next = retryAt.OrderBy(p => p.Value).First();
+                var seconds = Math.Max(0, (int)Math.Ceiling((next.Value - DateTime.UtcNow).TotalSeconds));
+                lblCurrentStatus.Text = string.Format(localization.strings.ResourceManager.GetString("helper_retry_status"), next.Key, seconds);
+            }
+            else
+                lblCurrentStatus.Text = ready == desiredHelpers.Count ? localization.strings.currently_ingame
+                    : localization.strings.ResourceManager.GetString("helper_starting");
+            UpdateStateInfo();
+        }
+
+        private void ForgetHelper(Badge badge)
+        {
+            desiredHelpers.Remove(badge);
+            retryAt.Remove(badge);
+            badge.StopIdle();
+        }
+
         private void StartHelper(Badge badge)
         {
+            desiredHelpers.Add(badge);
+            helperMonitor.Start();
+            if (retryAt.ContainsKey(badge)) return;
+            int session = idleSession;
             badge.Idle(this, (code, detail) =>
             {
-                if (Disposing || IsDisposed) return;
+                if (Disposing || IsDisposed || session != idleSession || !desiredHelpers.Contains(badge)) return;
+                retryAt[badge] = DateTime.UtcNow.AddMinutes(1);
                 string key;
                 switch ((HelperExitCode?)code)
                 {
@@ -430,6 +484,7 @@ namespace IdleMasterExtended
                 }
 
                 var reason = string.Format(localization.strings.ResourceManager.GetString(key), detail, code);
+                helperDetails.SetToolTip(lblCurrentStatus, reason);
                 string entry = $"{DateTime.Now:T}  {badge} (AppID {badge.AppId}) — {reason}";
                 var item = new ToolStripMenuItem(entry) { AutoToolTip = false };
                 item.Click += (sender, args) => MessageBox.Show(this, entry, "Diagnostics");
@@ -449,6 +504,7 @@ namespace IdleMasterExtended
         public void StartSoloIdle(Badge badge)
         {
             // Set the currentAppID value
+            foreach (var previous in desiredHelpers.Where(b => b != badge).ToList()) ForgetHelper(previous);
             CurrentBadge = badge;
 
             // Place user "In game" for card drops
@@ -469,7 +525,7 @@ namespace IdleMasterExtended
 
             // Update label controls
             lblCurrentRemaining.Text = badge.RemainingCard == -1 ? "" : CurrentBadge.RemainingCard + " " + localization.strings.card_drops_remaining;
-            lblCurrentStatus.Text = localization.strings.currently_ingame;
+            RefreshHelpers();
             lblHoursPlayed.Visible = !Settings.Default.IdlingModeWhitelist;
             lblHoursPlayed.Text = CurrentBadge.HoursPlayed + " " + localization.strings.hrs_on_record;
 
@@ -501,7 +557,7 @@ namespace IdleMasterExtended
 
             // Update label controls
             lblCurrentRemaining.Text = localization.strings.update_games_status;
-            lblCurrentStatus.Text = localization.strings.currently_ingame;
+            RefreshHelpers();
             lblCurrentStatus.Enabled = false;
 
             lblGameName.Visible = false;
@@ -568,7 +624,7 @@ namespace IdleMasterExtended
         {
             if (ReloadCount == 0)
             {
-                int numberOfCardsInIdle = CanIdleBadges.Count(b => b.InIdle);
+                int numberOfCardsInIdle = CanIdleBadges.Count(b => b.SteamReady && b.InIdle);
 
                 lblIdle.Text = string.Format(
                     "{0} " + localization.strings.games_left_to_idle
@@ -583,16 +639,16 @@ namespace IdleMasterExtended
         public void UpdateIdleProcesses()
         {
             var candidates = CanIdleBadges.Where(b => Settings.Default.IdlingModeWhitelist || b.HoursPlayed < 2).ToList();
-            foreach (var badge in AllBadges.Where(b => b.InIdle && !candidates.Contains(b)))
-                badge.StopIdle();
+            foreach (var badge in desiredHelpers.Where(b => !candidates.Contains(b)).ToList())
+                ForgetHelper(badge);
 
-            int slots = Math.Max(0, MaxSimultanousCards - candidates.Count(b => b.InIdle));
-            foreach (var badge in candidates.Where(b => !b.InIdle).Take(slots))
+            int slots = Math.Max(0, MaxSimultanousCards - desiredHelpers.Count);
+            foreach (var badge in candidates.Where(b => !desiredHelpers.Contains(b)).Take(slots))
                 StartHelper(badge);
 
             RefreshGamesStateListView();
 
-            if (!CanIdleBadges.Any(b => b.InIdle))
+            if (desiredHelpers.Count == 0)
                 NextIdle();
 
             UpdateStateInfo();
@@ -883,6 +939,7 @@ namespace IdleMasterExtended
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo(language_string);
             }
 
+            retryHelpers.Text = localization.strings.ResourceManager.GetString("helper_retry_now");
             // Localize form elements
             fileToolStripMenuItem.Text = localization.strings.file;
             gameToolStripMenuItem.Text = localization.strings.game;
@@ -1270,8 +1327,8 @@ namespace IdleMasterExtended
                     if (session != idleSession || ReloadCount != 0) return;
                     if (GamesRemaining == 0)
                     {
-                        foreach (var badge in AllBadges.Where(b => b.InIdle))
-                            badge.StopIdle();
+                        StopIdle();
+                        lblCurrentStatus.Text = localization.strings.idling_complete;
                         return;
                     }
 
@@ -1279,8 +1336,6 @@ namespace IdleMasterExtended
                     if (Settings.Default.fastMode && (ready != null || GamesRemaining == 1))
                     {
                         var next = ready ?? CanIdleBadges.First();
-                        foreach (var badge in AllBadges.Where(b => b != next && b.InIdle))
-                            badge.StopIdle();
                         StartSoloIdle(next);
                     }
                     else
