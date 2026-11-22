@@ -359,4 +359,6 @@ your Steam account.</value>
   <data name="helper_retry_status" xml:space="preserve"><value>{0} · retry in {1}s (Diagnostics)</value></data>
   <data name="helper_starting" xml:space="preserve"><value>Starting…</value></data>
   <data name="helper_retry_now" xml:space="preserve"><value>Retry now</value></data>
+  <data name="session_unavailable" xml:space="preserve"><value>Steam Community unavailable · retry in 1 minute</value></data>
+  <data name="session_try_again" xml:space="preserve"><value>Session could not be verified. Try again later.</value></data>
 </root>

@@ -167,11 +167,6 @@ namespace IdleMasterExtended
             if (string.IsNullOrEmpty(response))
             {
                 RetryCount++;
-                if (RetryCount == 18)
-                {
-                    ResetClientStatus();
-                    return;
-                }
                 throw new Exception("Response is null or empty. Added (+1) to RetryCount");
             }
         }
@@ -313,7 +308,8 @@ namespace IdleMasterExtended
             // There should be check for IsCookieReady, but property is set in timer tick, so it could take some time to be set.
             if (string.IsNullOrWhiteSpace(Settings.Default.sessionid) || !IsSteamReady)
             {
-                ResetClientStatus();
+                StopIdle();
+                tmrReadyToGo.Enabled = true;
             }
             else
             {
@@ -414,7 +410,8 @@ namespace IdleMasterExtended
             // There should be check for IsCookieReady, but property is set in timer tick, so it could take some time to be set.
             if (string.IsNullOrWhiteSpace(Settings.Default.sessionid) || !IsSteamReady)
             {
-                ResetClientStatus();
+                StopIdle();
+                tmrReadyToGo.Enabled = true;
             }
             else
             {
@@ -1306,21 +1303,26 @@ namespace IdleMasterExtended
 
             tmrReadyToGo.Enabled = false;
 
-            if (await CookieClient.IsLogined())
+            int session = idleSession;
+            string login = Settings.Default.steamLoginSecure;
+            var status = await CookieClient.CheckSessionAsync();
+            if (IsDisposed || Disposing || session != idleSession || login != Settings.Default.steamLoginSecure) return;
+            tmrReadyToGo.Interval = 100;
+            if (status == SessionStatus.Connected)
             {
                 await LoadBadgesAsync();
-                StartIdle();
+                if (session == idleSession && ReloadCount == 0) StartIdle();
+            }
+            else if (status == SessionStatus.Expired)
+            {
+                ResetClientStatus();
             }
             else
             {
-                if (string.IsNullOrEmpty(Settings.Default.myProfileURL))
-                {
-                    ResetClientStatus();
-                }
-                else
-                {
-                    await CookieClient.RefreshLoginToken();
-                }
+                picReadingPage.Visible = false;
+                lblDrops.Text = localization.strings.ResourceManager.GetString("session_unavailable");
+                tmrReadyToGo.Interval = 60000;
+                tmrReadyToGo.Start();
             }
         }
 

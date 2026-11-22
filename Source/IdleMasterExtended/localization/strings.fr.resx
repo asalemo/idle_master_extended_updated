@@ -358,4 +358,6 @@ celles-ci peuvent être utilisées par un pirate pour se connecter à votre comp
   <data name="helper_retry_status" xml:space="preserve"><value>{0} · nouvel essai dans {1}s (Diagnostics)</value></data>
   <data name="helper_starting" xml:space="preserve"><value>Démarrage…</value></data>
   <data name="helper_retry_now" xml:space="preserve"><value>Réessayer maintenant</value></data>
+  <data name="session_unavailable" xml:space="preserve"><value>Steam Community indisponible · nouvel essai dans une minute</value></data>
+  <data name="session_try_again" xml:space="preserve"><value>Impossible de vérifier la session. Réessaie plus tard.</value></data>
 </root>

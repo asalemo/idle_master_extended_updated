@@ -7,11 +7,13 @@ using IdleMasterExtended.Properties;
 
 namespace IdleMasterExtended
 {
+    internal enum SessionStatus { Connected, Expired, Unavailable }
+
     public class CookieClient : WebClient
     {
         internal CookieContainer Cookie = new CookieContainer();
 
-        internal Uri ResponseUri;
+        private bool sessionExpired;
 
         /// <summary>
         /// Instantiates a new <c>CookieClient</c> object.
@@ -30,82 +32,44 @@ namespace IdleMasterExtended
         /// <returns>The HTML content of the HTTP GET response</returns>
         public static async Task<string> GetHttpAsync(string url, int count = 3)
         {
-            while (true)
+            for (int attempt = 0; attempt <= count; attempt++)
             {
-                var client = new CookieClient();
-                var content = string.Empty;
+                using (var client = new CookieClient())
+                {
+                    try
+                    {
+                        string content = await client.DownloadStringTaskAsync(url);
+                        if (!string.IsNullOrWhiteSpace(content)) return content;
+                    }
+                    catch (WebException ex)
+                    {
+                        if (attempt == count) Logger.Exception(ex, "Steam Community request failed.");
+                    }
+                }
+                if (attempt < count) await Task.Delay(TimeSpan.FromSeconds(1 << Math.Min(attempt, 4)));
+            }
+            return string.Empty;
+        }
 
+        internal static async Task<SessionStatus> CheckSessionAsync()
+        {
+            using (var client = new CookieClient())
+            {
                 try
                 {
-                    content = await client.DownloadStringTaskAsync(url);
+                    var page = await client.DownloadStringTaskAsync(Settings.Default.myProfileURL);
+                    if (client.sessionExpired) return SessionStatus.Expired;
+                    var document = new HtmlDocument();
+                    document.LoadHtml(page);
+                    var marker = document.DocumentNode.SelectSingleNode("//span[@class='notification_count']");
+                    return marker != null ? SessionStatus.Connected : SessionStatus.Unavailable;
                 }
-                catch (Exception ex)
+                catch (WebException ex)
                 {
-                    Logger.Exception(ex, "CookieClient -> GetHttpAsync, for url = " + url);
+                    Logger.Exception(ex, "Steam Community session check unavailable.");
+                    return SessionStatus.Unavailable;
                 }
-
-                if (!string.IsNullOrWhiteSpace(content) || count == 0)
-                    return content;
-
-                count--;
             }
-        }
-
-        /// <summary>
-        /// Method <c>IsLogined</c> will attempt to find out if the user has successfully logged in or not.
-        /// </summary>
-        /// <returns><c>true</c> if there was information available that confirms the login as successful, otherwise <c>false</c></returns>
-        public static async Task<bool> IsLogined()
-        {
-            var document = new HtmlDocument();
-
-            try
-            {
-                var response = await GetHttpAsync(Settings.Default.myProfileURL);
-                document.LoadHtml(response);
-            }
-            catch (Exception ex)
-            {
-                Logger.Exception(ex, "CookieClient -> IsLogined, for url = " + Settings.Default.myProfileURL);
-            }
-
-            // The 'notification_count' contains the Steam profile notifications count. Every logged in user should have it available.
-            var notificationCountNode = document.DocumentNode.SelectSingleNode("//span[@class='notification_count']");
-
-            if (notificationCountNode is null || string.IsNullOrEmpty(notificationCountNode.InnerHtml))
-            {
-                // The user has no notification count available --> not logged in properly.
-                ClearCookies();
-                return false;
-            } 
-            else
-            {
-                return true;
-            }
-        }
-
-        public static async Task<bool> RefreshLoginToken()
-        {
-            var document = new HtmlDocument();
-
-            var cookies = new CookieContainer();
-            var target = new Uri("https://steamcommunity.com");
-
-            cookies.Add(new Cookie("Cookie", "steamRefresh_steam=" + Settings.Default.steamLoginSecure) { Domain = target.Host });
-
-            try
-            {
-                var response = await GetHttpAsync("https://login.steampowered.com/jwt/refresh?redir=https%3A%2F%2Fsteamcommunity.com");
-                document.LoadHtml(response);
-                
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Exception(ex, "CookieClient -> RefreshToken, for url = " + Settings.Default.myProfileURL);
-            }
-
-            return false;
         }
 
         protected override WebRequest GetWebRequest(Uri address)
@@ -120,43 +84,12 @@ namespace IdleMasterExtended
 
         protected override WebResponse GetWebResponse(WebRequest request, System.IAsyncResult result)
         {
-            try
-            {
-                var baseResponse = base.GetWebResponse(request);
-
-                var cookies = (baseResponse as HttpWebResponse).Cookies;
-
-                // Check, if cookie should be deleted. This means that sessionID is now invalid and user has to log in again.
-                // Maybe this shoud be done other way (authenticate exception), but because of shared settings and timers in frmMain...
-                Cookie loginCookie = cookies["steamLoginSecure"];
-                if (loginCookie != null && loginCookie.Value == "deleted")
-                {
-                    ClearCookies();
-                }
-
-                ResponseUri = baseResponse.ResponseUri;
-                
-                return baseResponse;
-            }
-            catch (Exception ex)
-            {
-                Logger.Exception(ex, "CookieClient -> WebResponse = " + request);
-            }
-            
-            return null;
-        }
-
-        private static void ClearCookies()
-        {
-            Settings.Default.sessionid = string.Empty;
-            Settings.Default.steamLogin = string.Empty;
-            Settings.Default.steamLoginSecure = string.Empty;
-            Settings.Default.steamparental = string.Empty;
-            Settings.Default.steamMachineAuth = string.Empty;
-            Settings.Default.steamRememberLogin = string.Empty;
-            Settings.Default.myProfileURL = string.Empty;
-
-            Settings.Default.Save();
+            var response = (HttpWebResponse)base.GetWebResponse(request, result);
+            var cookie = response.Cookies["steamLoginSecure"];
+            sessionExpired = response.ResponseUri.Host == "steamcommunity.com" &&
+                (response.ResponseUri.AbsolutePath.StartsWith("/login/", StringComparison.OrdinalIgnoreCase) ||
+                 (cookie != null && (cookie.Expired || cookie.Value == "deleted")));
+            return response;
         }
 
         private static CookieContainer GenerateCookies()

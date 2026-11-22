@@ -108,15 +108,19 @@ namespace IdleMasterExtended
 
         private async Task CheckAndSave()
         {
+            var oldSession = Settings.Default.sessionid;
+            var oldLogin = Settings.Default.steamLoginSecure;
+            var oldUrl = Settings.Default.myProfileURL;
+            var oldParental = Settings.Default.steamparental;
+            var status = SessionStatus.Unavailable;
             try
             {
                 Settings.Default.sessionid = txtSessionID.Text.Trim();
                 Settings.Default.steamLoginSecure = txtSteamLoginSecure.Text.Trim();
                 Settings.Default.myProfileURL = SteamProfile.GetSteamUrl();
                 Settings.Default.steamparental = txtSteamParental.Text.Trim();
-
-                // Test if the cookie data is valid
-                if (await CookieClient.IsLogined())
+                status = await CookieClient.CheckSessionAsync();
+                if (status == SessionStatus.Connected)
                 {
                     Settings.Default.Save();
                     Close();
@@ -125,28 +129,17 @@ namespace IdleMasterExtended
             }
             catch (Exception ex)
             {
-                Logger.Exception(ex, "frmSettingsAdvanced -> CheckAndSave");
+                Logger.Exception(ex, "Could not validate Steam session.");
             }
-
-            // Invalid cookie data, reset the form
+            Settings.Default.sessionid = oldSession;
+            Settings.Default.steamLoginSecure = oldLogin;
+            Settings.Default.myProfileURL = oldUrl;
+            Settings.Default.steamparental = oldParental;
+            txtSessionID.Enabled = txtSteamLoginSecure.Enabled = txtSteamParental.Enabled = true;
             btnUpdate.Text = localization.strings.update;
-            txtSessionID.Text = "";
-            txtSteamLoginSecure.Text = "";
-            txtSteamParental.Text = "";
-
-            txtSessionID.PasswordChar = '\0';
-            txtSteamLoginSecure.PasswordChar = '\0';
-            txtSteamParental.PasswordChar = '\0';
-
-            txtSessionID.Enabled = true;
-            txtSteamLoginSecure.Enabled = true;
-            txtSteamParental.Enabled = true;
-
-            txtSessionID.Focus();
-
-            MessageBox.Show(localization.strings.validate_failed);
-
             btnUpdate.Enabled = true;
+            MessageBox.Show(status == SessionStatus.Expired ? localization.strings.validate_failed :
+                localization.strings.ResourceManager.GetString("session_try_again"));
         }
 
         private async void btnUpdate_Click(object sender, EventArgs e)
