@@ -25,6 +25,8 @@ Steam sign-in, single-game testing and Diagnostics are available in English, Fre
 
 When idling one game, two hours of successful checks with the same positive card count trigger a switch at the next check. Diagnostics shows the game, remaining count and elapsed time. Deferred games stay eligible for another turn. With only one eligible game, the helper stays active. A change of count, a failed read or a pause resets the observation period.
 
+[Test game rotation and check elapsed time in Diagnostics](https://github.com/asalemo/idle_master_extended_updated/wiki/Verify-RC5-game-rotation)
+
 ## What to expect
 
 Fast mode runs up to 30 eligible games in parallel while they are below two recorded hours. It checks progress every five minutes. Once a game qualifies for individual idling, or only one remains, it stays active between checks.
