@@ -1,16 +1,16 @@
 # Idle Master Extended Updated
 
-[English](README.md) · [Télécharger la RC Windows x64](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.4) · [Wiki du fork](https://github.com/asalemo/idle_master_extended_updated/wiki)
+[English](README.md) · [Télécharger la RC Windows x64](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.5) · [Wiki du fork](https://github.com/asalemo/idle_master_extended_updated/wiki)
 
 Ce fork Windows d’Idle Master Extended repère les jeux de ta bibliothèque Steam qui ont encore des cartes à distribuer. Il utilise le programme auxiliaire `steam-idle.exe` pour signaler une activité en jeu à Steam. Steam détermine le moment où les cartes sont distribuées.
 
-## Choisir sa connexion dans la RC4
+## Choisir sa connexion dans la RC5
 
 Clique sur **Se connecter**, puis choisis **Se connecter avec Steam** ou **Saisir les informations de session**. La saisie manuelle accepte sessionid, steamLoginSecure et le cookie parental facultatif pour cette exécution. Les préférences sont conservées. Les diagnostics et les compteurs d’activité restent en mémoire. La connexion par navigateur utilise un profil privé temporaire que l’application tente de supprimer à la fermeture du navigateur. Un arrêt forcé peut laisser des fichiers temporaires.
 
 ## Guide et langue de l’interface
 
-[Guide RC4 : se connecter à Steam, changer de langue et tester un seul jeu](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas) · [Tester les deux modes de connexion et vérifier les données conservées après fermeture](https://github.com/asalemo/idle_master_extended_updated/wiki/Verifier-la-confidentialite-RC4)
+[Guide RC5 : se connecter à Steam, changer de langue et tester un seul jeu](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas) · [Tester les deux modes de connexion et vérifier les données conservées après fermeture](https://github.com/asalemo/idle_master_extended_updated/wiki/Verifier-la-confidentialite-RC5)
 
 Dans **Fichier → Réglages**, choisis **Langue de Windows** ou le nom d’une langue, puis redémarre l’application.
 La connexion Steam, le test d’un jeu et les diagnostics sont disponibles en français, anglais, allemand, espagnol, italien et portugais (Portugal et Brésil). Pour les autres langues de l’interface, les textes qui restent à traduire s’affichent en anglais.
@@ -23,7 +23,7 @@ La connexion Steam, le test d’un jeu et les diagnostics sont disponibles en fr
 
 Les versions publiées pour ce fork figurent sur la [page des versions](https://github.com/asalemo/idle_master_extended_updated/releases). Pour tester une modification présente uniquement sur la branche `develop`, compile cette branche.
 
-## File automatique sur develop
+## File automatique dans la RC5
 
 Quand un seul jeu est actif et que les vérifications réussies indiquent le même nombre positif de cartes pendant deux heures, la file passe au jeu suivant lors de la vérification. Diagnostics indique le jeu, le compteur et la durée. Le jeu reporté reste dans la file. Si lui seul est admissible, il reste actif. Une variation du compteur, une lecture en échec ou une pause remet la durée à zéro.
 
