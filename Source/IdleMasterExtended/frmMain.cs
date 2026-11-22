@@ -255,44 +255,59 @@ namespace IdleMasterExtended
         #endregion
 
         #region IDLING
-        private void StartIdle()
-        {
-            // Mark our own stops before checking for orphaned helpers.
-            foreach (var badge in AllBadges.Where(b => b.InIdle))
-                badge.StopIdle();
+        private Task orphanCleanup;
+        private int startRequest;
 
-            // Clean up orphaned helpers without interrupting another running instance.
+        private static void CleanOrphanHelpers()
+        {
             try
             {
-                String username = WindowsIdentity.GetCurrent().Name;
-                int currentPid = Process.GetCurrentProcess().Id;
-                var otherInstances = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName)
-                    .Select(p => p.Id).Where(id => id != currentPid).ToList();
-                foreach (var process in Process.GetProcessesByName("steam-idle"))
+                if (Process.GetProcessesByName("steam-idle").Length == 0) return;
+                string owner = WindowsIdentity.GetCurrent().Name;
+                using (var current = Process.GetCurrentProcess())
+                using (var search = new ManagementObjectSearcher("SELECT * FROM Win32_Process WHERE Name='steam-idle.exe'"))
+                using (var rows = search.Get())
                 {
-                    ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * From Win32_Process Where ProcessID = " + process.Id);
-                    ManagementObjectCollection processList = searcher.Get();
-
-                    foreach (ManagementObject obj in processList)
+                    foreach (ManagementObject row in rows)
+                    using (row)
                     {
-                        if (otherInstances.Contains(Convert.ToInt32(obj["ParentProcessId"]))) continue;
-                        string[] argList = new string[] { string.Empty, string.Empty };
-                        int returnVal = Convert.ToInt32(obj.InvokeMethod("GetOwner", argList));
-                        if (returnVal == 0)
+                        try
                         {
-                            if (argList[1] + "\\" + argList[0] == username)
+                            int parentId = Convert.ToInt32(row["ParentProcessId"]);
+                            if (parentId == current.Id) continue;
+                            try
                             {
-                                process.Kill();
+                                using (var parent = Process.GetProcessById(parentId))
+                                    if (parent.ProcessName == current.ProcessName) continue;
+                            }
+                            catch (ArgumentException) { /* The parent has already exited. */ }
+
+                            string[] account = { "", "" };
+                            using (var helper = Process.GetProcessById(Convert.ToInt32(row["ProcessId"])))
+                            {
+                                if (helper.ProcessName == "steam-idle" &&
+                                    Convert.ToInt32(row.InvokeMethod("GetOwner", account)) == 0 &&
+                                    account[1] + "\\" + account[0] == owner)
+                                    helper.Kill();
                             }
                         }
+                        catch (ArgumentException) { /* The helper has already exited. */ }
                     }
-
                 }
             }
             catch (Exception ex)
             {
-                Logger.Exception(ex, "frmMain -> StartIdle -> The attempt to kill rogue processes resulted in an exception.");
+                Logger.Exception(ex, "Could not clean up orphaned helpers.");
             }
+        }
+
+        private async void StartIdle()
+        {
+            int session = idleSession;
+            int request = ++startRequest;
+            if (orphanCleanup == null) orphanCleanup = Task.Run((Action)CleanOrphanHelpers);
+            await orphanCleanup;
+            if (IsDisposed || Disposing || session != idleSession || request != startRequest) return;
 
             // Check if user is authenticated and if any badge left to idle
             // There should be check for IsCookieReady, but property is set in timer tick, so it could take some time to be set.
@@ -1177,8 +1192,7 @@ namespace IdleMasterExtended
 
             if (Settings.Default.showUsername && IsCookieReady)
             {
-                lblSignedOnAs.Text = SteamProfile.GetSignedAs();
-                lblSignedOnAs.Visible = Settings.Default.showUsername;
+                _ = RefreshUsernameAsync();
             }
         }
 
@@ -1266,6 +1280,15 @@ namespace IdleMasterExtended
             StartIdle();
         }
 
+        private async Task RefreshUsernameAsync()
+        {
+            string id = SteamProfile.GetSteamId();
+            string label = await SteamProfile.GetSignedAsAsync();
+            if (IsDisposed || Disposing || !Settings.Default.showUsername || SteamProfile.GetSteamId() != id) return;
+            lblSignedOnAs.Text = label;
+            lblSignedOnAs.Visible = true;
+        }
+
         private async void tmrReadyToGo_Tick(object sender, EventArgs e)
         {
             if (!IsCookieReady || !IsSteamReady)
@@ -1273,8 +1296,7 @@ namespace IdleMasterExtended
 
             if (Settings.Default.showUsername)
             {
-                lblSignedOnAs.Text = SteamProfile.GetSignedAs();
-                lblSignedOnAs.Visible = true;
+                _ = RefreshUsernameAsync();
             }
 
             lblDrops.Visible = true;

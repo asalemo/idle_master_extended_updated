@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text;
 using System.Xml;
+using System.Threading.Tasks;
 using IdleMasterExtended.Properties;
 
 namespace IdleMasterExtended
@@ -20,13 +21,15 @@ namespace IdleMasterExtended
             return "https://steamcommunity.com/profiles/" + GetSteamId();
         }
 
-        internal static string GetSignedAs()
+        internal static async Task<string> GetSignedAsAsync()
         {
             var steamUrl = GetSteamUrl();
             var userName = "User " + GetSteamId();
             try
             {
-                var xmlRaw = new WebClient() { Encoding = Encoding.UTF8 }.DownloadString(string.Format("{0}/?xml=1", steamUrl));
+                string xmlRaw;
+                using (var client = new WebClient { Encoding = Encoding.UTF8 })
+                    xmlRaw = await client.DownloadStringTaskAsync(steamUrl + "/?xml=1");
                 var xml = new XmlDocument();
                 xml.LoadXml(xmlRaw);
                 var nameNode = xml.SelectSingleNode("//steamID");
