@@ -360,4 +360,7 @@ celles-ci peuvent être utilisées par un pirate pour se connecter à votre comp
   <data name="helper_retry_now" xml:space="preserve"><value>Réessayer maintenant</value></data>
   <data name="session_unavailable" xml:space="preserve"><value>Steam Community indisponible · nouvel essai dans une minute</value></data>
   <data name="session_try_again" xml:space="preserve"><value>Impossible de vérifier la session. Réessaie plus tard.</value></data>
+  <data name="copy_details" xml:space="preserve"><value>Copier les détails</value></data>
+  <data name="clipboard_busy" xml:space="preserve"><value>Presse-papiers occupé. Réessaie.</value></data>
+  <data name="failure_count" xml:space="preserve"><value>Tentatives : {0}</value></data>
 </root>

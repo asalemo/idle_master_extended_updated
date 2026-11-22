@@ -484,33 +484,70 @@ namespace IdleMasterExtended
             {
                 if (Disposing || IsDisposed || session != idleSession || !desiredHelpers.Contains(badge)) return;
                 retryAt[badge] = DateTime.UtcNow.AddMinutes(1);
-                string key;
-                switch ((HelperExitCode?)code)
-                {
-                    case null: key = "helper_launch_failed"; break;
-                    case HelperExitCode.SteamInitializationFailed: key = "helper_steam_failed"; break;
-                    case HelperExitCode.SteamLibraryUnavailable: key = "helper_library_failed"; break;
-                    case HelperExitCode.InvalidAppId: key = "helper_invalid_id"; break;
-                    case HelperExitCode.Closed: key = "helper_closed"; break;
-                    default: key = "helper_unexpected_exit"; break;
-                }
+                RecordHelperFailure(badge, code, detail);
+                UpdateStateInfo();
+            });
+        }
 
-                var reason = string.Format(localization.strings.ResourceManager.GetString(key), detail, code);
-                helperDetails.SetToolTip(lblCurrentStatus, reason);
-                string entry = $"{DateTime.Now:T}  {badge} (AppID {badge.AppId}) — {reason}";
-                var item = new ToolStripMenuItem(entry) { AutoToolTip = false };
-                item.Click += (sender, args) => MessageBox.Show(this, entry, "Diagnostics");
-                diagnostics.DropDownItems.Insert(0, item);
-                if (diagnostics.DropDownItems.Count > 50)
+        internal static string HelperFailureReason(int? code, string detail)
+        {
+            string key;
+            switch ((HelperExitCode?)code)
+            {
+                case null: key = "helper_launch_failed"; break;
+                case HelperExitCode.SteamInitializationFailed: key = "helper_steam_failed"; break;
+                case HelperExitCode.SteamLibraryUnavailable: key = "helper_library_failed"; break;
+                case HelperExitCode.InvalidAppId: key = "helper_invalid_id"; break;
+                case HelperExitCode.Closed: key = "helper_closed"; break;
+                default: key = "helper_unexpected_exit"; break;
+            }
+            return string.Format(localization.strings.ResourceManager.GetString(key), detail, code);
+        }
+
+        private sealed class DiagnosticItem : ToolStripMenuItem
+        {
+            internal int AppId;
+            internal string Reason;
+            internal int Count;
+        }
+
+        private void RecordHelperFailure(Badge badge, int? code, string detail)
+        {
+            string reason = HelperFailureReason(code, detail);
+            helperDetails.SetToolTip(lblCurrentStatus, reason);
+            var item = diagnostics.DropDownItems.OfType<DiagnosticItem>()
+                .FirstOrDefault(i => i.AppId == badge.AppId && i.Reason == reason);
+            if (item == null)
+            {
+                item = new DiagnosticItem { AppId = badge.AppId, Reason = reason };
+                var retry = item.DropDownItems.Add(localization.strings.ResourceManager.GetString("helper_retry_now"));
+                item.DropDownOpening += (sender, args) => retry.Enabled = retryAt.ContainsKey(badge);
+                retry.Click += (sender, args) =>
                 {
-                    var oldest = diagnostics.DropDownItems[50];
+                    if (!retryAt.ContainsKey(badge)) return;
+                    retryAt[badge] = DateTime.MinValue;
+                    RefreshHelpers();
+                };
+                item.DropDownItems.Add(localization.strings.ResourceManager.GetString("copy_details"), null, (sender, args) =>
+                {
+                    try { Clipboard.SetText(item.Text); }
+                    catch (ExternalException) { MessageBox.Show(this, localization.strings.ResourceManager.GetString("clipboard_busy")); }
+                });
+                if (diagnostics.DropDownItems.Count == 50)
+                {
+                    var oldest = diagnostics.DropDownItems[49];
                     diagnostics.DropDownItems.Remove(oldest);
                     oldest.Dispose();
                 }
-                diagnostics.Text = $"Diagnostics ({diagnostics.DropDownItems.Count})";
-                diagnostics.Visible = true;
-                UpdateStateInfo();
-            });
+            }
+            else diagnostics.DropDownItems.Remove(item);
+
+            item.Count++;
+            string attempts = string.Format(localization.strings.ResourceManager.GetString("failure_count"), item.Count);
+            item.Text = $"{DateTime.Now:T}  {badge} (AppID {badge.AppId}) — {reason} ({attempts})";
+            diagnostics.DropDownItems.Insert(0, item);
+            diagnostics.Text = $"Diagnostics ({diagnostics.DropDownItems.Count})";
+            diagnostics.Visible = true;
         }
 
         public void StartSoloIdle(Badge badge)
