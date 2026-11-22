@@ -1,5 +1,7 @@
 # Idle Master Extended Updated
 
+Sur cette branche, tu peux [tester un seul jeu avec le prototype Linux en ligne de commande](linux-cli/README.md).
+
 [English](README.md) · [Télécharger la RC Windows x64](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.1) · [Wiki du fork](https://github.com/asalemo/idle_master_extended_updated/wiki)
 
 Ce fork Windows d’Idle Master Extended repère les jeux de ta bibliothèque Steam qui ont encore des cartes à distribuer. Il utilise le programme auxiliaire `steam-idle.exe` pour signaler une activité en jeu à Steam. Steam détermine le moment où les cartes sont distribuées.

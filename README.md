@@ -1,5 +1,7 @@
 # Idle Master Extended Updated
 
+Try the [Linux single-game CLI prototype](linux-cli/README.md) on this branch.
+
 Idle Master checks your Steam badges for remaining trading card drops and starts a small helper for each selected game. Steam determines when cards drop. This fork targets **Windows x64** and includes changes to game switching, startup responsiveness and session recovery.
 
 [Français](README.fr.md) · [Download the Windows release candidate](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.1) · [User guide](https://github.com/asalemo/idle_master_extended_updated/wiki)
