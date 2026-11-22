@@ -13,6 +13,7 @@ namespace IdleMasterExtended
         [STAThread]
         static void Main()
         {
+            IdleMaster.WindowsErrorReporting.DisableErrorWindows();
             // Set the Browser emulation version for embedded browser control
             try
             {
@@ -31,7 +32,8 @@ namespace IdleMasterExtended
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(new frmMain());
+            try { Application.Run(new frmMain()); }
+            catch (Exception ex) { Logger.Exception(ex, "Desktop application stopped."); }
         }
     }
 }

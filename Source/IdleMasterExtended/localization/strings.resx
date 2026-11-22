@@ -376,4 +376,5 @@ your Steam account.</value>
   <data name="timing_pending" xml:space="preserve"><value>No measurement yet</value></data>
   <data name="badge_timing" xml:space="preserve"><value>Pages: {0} · Steam requests: {1:F0} ms · Local processing: {2:F0} ms</value></data>
   <data name="helper_timing" xml:space="preserve"><value>First helper confirmation: {0}</value></data>
+  <data name="helper_runtime_failure" xml:space="preserve"><value>The helper stopped unexpectedly. Check the game and retry.</value></data>
 </root>

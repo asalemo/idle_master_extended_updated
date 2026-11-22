@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 using System.Text;
 using System.Threading;
 
@@ -9,101 +9,65 @@ namespace IdleMasterExtended
 {
     public static class Logger
     {
-        private static readonly object LogLock = new object();
+        private static readonly object Gate = new object();
+        private static readonly Dictionary<string, int> Pending = new Dictionary<string, int>();
+        private static readonly Queue<string> FileQueue = new Queue<string>();
+        private static bool writing;
 
-        private static readonly string ExceptionPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @".\error.log";
+        internal static void Report(string message)
+        {
+            lock (Gate)
+            {
+                int count;
+                if (Pending.TryGetValue(message, out count)) Pending[message] = count + 1;
+                else if (Pending.Count < 50) Pending.Add(message, 1);
+            }
+        }
+
+        internal static KeyValuePair<string, int>[] Drain()
+        {
+            lock (Gate)
+            {
+                var entries = Pending.ToArray();
+                Pending.Clear();
+                return entries;
+            }
+        }
 
         public static void Exception(Exception ex, params string[] messages)
         {
-            var contents = string.Concat(DateTime.Now, "   ", string.Join(Environment.NewLine, messages),
-              Environment.NewLine, ex.ToString(), Environment.NewLine);
-            Write(contents, ExceptionPath);
-        }
-
-        private static void Write(string contents, string path)
-        {
-            Console.WriteLine(contents);
-            using (TimedLock.Lock(LogLock))
+            string context = string.Join(" ", messages);
+            Report(string.IsNullOrEmpty(context) ? ex.GetType().Name : context);
+            lock (Gate)
             {
-                File.AppendAllText(path, contents, Encoding.UTF8);
+                if (FileQueue.Count == 50) FileQueue.Dequeue();
+                FileQueue.Enqueue($"{DateTime.Now:u} {context}{Environment.NewLine}{ex}{Environment.NewLine}");
+                if (writing) return;
+                writing = true;
+                ThreadPool.QueueUserWorkItem(WriteLog);
             }
         }
-    }
 
-
-    // Thanks to Eric Gunnerson for recommending this be a struct rather
-    // than a class - avoids a heap allocation.
-    // Thanks to Change Gillespie and Jocelyn Coulmance for pointing out
-    // the bugs that then crept in when I changed it to use struct...
-    // Thanks to John Sands for providing the necessary incentive to make
-    // me invent a way of using a struct in both release and debug builds
-    // without losing the debug leak tracking.
-
-    public struct TimedLock : IDisposable
-    {
-        public static TimedLock Lock(object o)
+        private static void WriteLog(object state)
         {
-            return Lock(o, TimeSpan.FromSeconds(10));
-        }
-
-        public static TimedLock Lock(object o, TimeSpan timeout)
-        {
-            var tl = new TimedLock(o);
-            if (!Monitor.TryEnter(o, timeout))
+            while (true)
             {
-#if DEBUG
-                GC.SuppressFinalize(tl.leakDetector);
-#endif
-                throw new LockTimeoutException();
+                string entry;
+                lock (Gate)
+                {
+                    if (FileQueue.Count == 0) { writing = false; return; }
+                    entry = FileQueue.Dequeue();
+                }
+                try
+                {
+                    File.AppendAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.log"), entry, Encoding.UTF8);
+                }
+                catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException ||
+                                           ex is System.Security.SecurityException)
+                {
+                    // In-memory diagnostics remain available in read-only installations.
+                }
             }
-
-            return tl;
-        }
-
-        private TimedLock(object o)
-        {
-            target = o;
-#if DEBUG
-            leakDetector = new Sentinel();
-#endif
-        }
-        private object target;
-
-        public void Dispose()
-        {
-            Monitor.Exit(target);
-
-            // It's a bad error if someone forgets to call Dispose,
-            // so in Debug builds, we put a finalizer in to detect
-            // the error. If Dispose is called, we suppress the
-            // finalizer.
-#if DEBUG
-            GC.SuppressFinalize(leakDetector);
-#endif
-        }
-
-#if DEBUG
-        // (In Debug mode, we make it a class so that we can add a finalizer
-        // in order to detect when the object is not freed.)
-        private class Sentinel
-        {
-            ~Sentinel()
-            {
-                // If this finalizer runs, someone somewhere failed to
-                // call Dispose, which means we've failed to leave
-                // a monitor!
-                Debug.Fail("Undisposed lock");
-            }
-        }
-        private Sentinel leakDetector;
-#endif
-
-    }
-    public class LockTimeoutException : ApplicationException
-    {
-        public LockTimeoutException()
-          : base("Timeout waiting for lock")
-        {
         }
     }
 }

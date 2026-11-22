@@ -1,6 +1,6 @@
 # Idle Master Extended Updated
 
-[English](README.md) · [Télécharger la RC Windows x64](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.1) · [Wiki du fork](https://github.com/asalemo/idle_master_extended_updated/wiki)
+[English](README.md) · [Télécharger la RC Windows x64](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.2) · [Wiki du fork](https://github.com/asalemo/idle_master_extended_updated/wiki)
 
 Ce fork Windows d’Idle Master Extended repère les jeux de ta bibliothèque Steam qui ont encore des cartes à distribuer. Il utilise le programme auxiliaire `steam-idle.exe` pour signaler une activité en jeu à Steam. Steam détermine le moment où les cartes sont distribuées.
 
@@ -18,9 +18,13 @@ Les versions publiées pour ce fork figurent sur la [page des versions](https://
 - Dès qu’un jeu admissible atteint deux heures, le programme le garde actif seul. S’il ne reste qu’un seul jeu admissible, il passe directement à ce jeu, même sous le seuil. Les deux heures sont un critère de sélection propre au programme.
 - Le mode rapide conserve le jeu sélectionné entre les vérifications. Si Steam est temporairement inaccessible pendant une vérification individuelle, le programme garde le jeu actif et réessaie une minute plus tard.
 
+## Nouveautés RC2
+
+**Fichier → Tester un jeu** recherche les titres installés. Le démarrage du test suspend la file automatique. Arrête le test ou ferme sa fenêtre, puis reprends la file quand tu le souhaites. **Fichier → Temps mesurés** affiche les délais. Les erreurs répétées sont regroupées dans **Diagnostics** et le programme auxiliaire fonctionne sans fenêtre.
+
 ## Diagnostic des fermetures
 
-Si un programme auxiliaire se ferme de lui-même ou ne démarre pas, ouvre le menu **Diagnostics** qui apparaît dans la fenêtre principale. Chaque entrée indique l’heure, le jeu, son AppID et le motif disponible. Une initialisation Steam refusée, une bibliothèque native manquante et une fermeture avec un code inconnu ont des messages distincts. Les arrêts demandés par Idle Master (pause ou changement de jeu) ne sont pas signalés. Le menu conserve les 50 derniers événements de la session.
+Si un programme auxiliaire se ferme de lui-même ou ne démarre pas, ouvre le menu **Diagnostics** qui apparaît dans la fenêtre principale. Chaque entrée indique l’heure, le jeu, son AppID et le motif disponible. Une initialisation Steam refusée, une bibliothèque native manquante et une fermeture avec un code inconnu ont des messages distincts. Les arrêts demandés par Idle Master (pause ou changement de jeu) ne sont pas signalés. Le menu conserve les 50 derniers problèmes distincts de la session.
 
 Le statut « En jeu » attend la confirmation de l’initialisation Steam. Après un échec, le prochain essai a lieu une minute plus tard. **Fichier → Réessayer maintenant** relance immédiatement les jeux en attente. Une panne temporaire du site Steam conserve la session enregistrée.
 

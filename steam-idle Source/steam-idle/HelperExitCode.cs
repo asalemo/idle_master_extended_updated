@@ -5,6 +5,7 @@ namespace IdleMaster
         Closed = 0,
         SteamInitializationFailed = 20,
         SteamLibraryUnavailable = 21,
-        InvalidAppId = 22
+        InvalidAppId = 22,
+        RuntimeFailure = 23
     }
 }

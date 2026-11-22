@@ -2,7 +2,7 @@
 
 Idle Master checks your Steam badges for remaining trading card drops and starts a small helper for each selected game. Steam determines when cards drop. This fork targets **Windows x64** and includes changes to game switching, startup responsiveness and session recovery.
 
-[Français](README.fr.md) · [Download the Windows release candidate](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.1) · [User guide](https://github.com/asalemo/idle_master_extended_updated/wiki)
+[Français](README.fr.md) · [Download the Windows release candidate](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.2) · [User guide](https://github.com/asalemo/idle_master_extended_updated/wiki)
 
 ## Get started
 
@@ -17,6 +17,10 @@ Fast mode runs up to 30 eligible games in parallel while they are below two reco
 **Starting** means the helper has launched. **Currently in-game** appears after the helper confirms local Steam API initialization. If it exits, the Diagnostics menu identifies the game, AppID and reason. Failed helpers wait one minute between attempts. **File → Retry now** retries pending games immediately.
 
 The profile name and orphan-process cleanup run in the background. An unreadable profile or temporary connection failure preserves the saved session and schedules another startup check in one minute.
+
+## RC2 on Windows
+
+Open **File → Test a game** to search installed titles. Starting a test pauses the automatic queue. Stop the test or close its window, then resume the queue when ready. **File → Timings** shows the last badge request and processing times and the first helper confirmation. Repeated failures are grouped in **Diagnostics**, with retry and copy actions. Helpers run without a window.
 
 ## Build and contribute
 

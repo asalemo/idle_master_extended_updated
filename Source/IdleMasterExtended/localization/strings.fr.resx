@@ -375,4 +375,5 @@ celles-ci peuvent être utilisées par un pirate pour se connecter à votre comp
   <data name="timing_pending" xml:space="preserve"><value>Aucune mesure disponible</value></data>
   <data name="badge_timing" xml:space="preserve"><value>Pages : {0} · Requêtes Steam : {1:F0} ms · Traitement local : {2:F0} ms</value></data>
   <data name="helper_timing" xml:space="preserve"><value>Première confirmation de Steam : {0}</value></data>
+  <data name="helper_runtime_failure" xml:space="preserve"><value>Le programme auxiliaire s’est arrêté. Vérifie le jeu puis réessaie.</value></data>
 </root>

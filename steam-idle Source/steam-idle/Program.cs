@@ -1,5 +1,5 @@
 ﻿﻿using System;
-using System.Windows.Forms;
+using System.Threading;
 using Steamworks;
 using IdleMaster;
 
@@ -9,6 +9,13 @@ namespace steam_idle
     {
         [STAThread]
         static int Main(string[] args)
+        {
+            IdleMaster.WindowsErrorReporting.DisableErrorWindows();
+            try { return Run(args); }
+            catch (Exception) { return (int)HelperExitCode.RuntimeFailure; }
+        }
+
+        private static int Run(string[] args)
         {
             uint appId;
             if (args.Length != 1 || !uint.TryParse(args[0], out appId) || appId == 0)
@@ -26,11 +33,16 @@ namespace steam_idle
                 return (int)HelperExitCode.SteamLibraryUnavailable;
             }
 
-            if (Console.IsOutputRedirected) Console.WriteLine("READY");
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormSteamIdle(appId));
-            return (int)HelperExitCode.Closed;
+            try
+            {
+                if (Console.IsOutputRedirected) Console.WriteLine("READY");
+                while (true)
+                {
+                    SteamAPI.RunCallbacks();
+                    Thread.Sleep(100);
+                }
+            }
+            finally { SteamAPI.Shutdown(); }
         }
     }
 }

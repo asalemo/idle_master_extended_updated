@@ -522,6 +522,7 @@ namespace IdleMasterExtended
                 case HelperExitCode.SteamInitializationFailed: key = "helper_steam_failed"; break;
                 case HelperExitCode.SteamLibraryUnavailable: key = "helper_library_failed"; break;
                 case HelperExitCode.InvalidAppId: key = "helper_invalid_id"; break;
+                case HelperExitCode.RuntimeFailure: key = "helper_runtime_failure"; break;
                 case HelperExitCode.Closed: key = "helper_closed"; break;
                 default: key = "helper_unexpected_exit"; break;
             }
@@ -538,24 +539,32 @@ namespace IdleMasterExtended
         private void RecordHelperFailure(Badge badge, int? code, string detail)
         {
             string reason = HelperFailureReason(code, detail);
-            helperDetails.SetToolTip(lblCurrentStatus, reason);
+            RecordDiagnostic(badge, reason, 1);
+        }
+
+        private void RecordDiagnostic(Badge badge, string reason, int occurrences)
+        {
+            int appId = badge == null ? 0 : badge.AppId;
             var item = diagnostics.DropDownItems.OfType<DiagnosticItem>()
-                .FirstOrDefault(i => i.AppId == badge.AppId && i.Reason == reason);
+                .FirstOrDefault(i => i.AppId == appId && i.Reason == reason);
             if (item == null)
             {
-                item = new DiagnosticItem { AppId = badge.AppId, Reason = reason };
-                var retry = item.DropDownItems.Add(localization.strings.ResourceManager.GetString("helper_retry_now"));
-                item.DropDownOpening += (sender, args) => retry.Enabled = retryAt.ContainsKey(badge);
-                retry.Click += (sender, args) =>
+                item = new DiagnosticItem { AppId = appId, Reason = reason };
+                if (badge != null)
                 {
-                    if (!retryAt.ContainsKey(badge)) return;
-                    retryAt[badge] = DateTime.MinValue;
-                    RefreshHelpers();
-                };
+                    var retry = item.DropDownItems.Add(localization.strings.ResourceManager.GetString("helper_retry_now"));
+                    item.DropDownOpening += (sender, args) => retry.Enabled = retryAt.ContainsKey(badge);
+                    retry.Click += (sender, args) =>
+                    {
+                        if (!retryAt.ContainsKey(badge)) return;
+                        retryAt[badge] = DateTime.MinValue;
+                        RefreshHelpers();
+                    };
+                }
                 item.DropDownItems.Add(localization.strings.ResourceManager.GetString("copy_details"), null, (sender, args) =>
                 {
-                    try { Clipboard.SetText(item.Text); }
-                    catch (ExternalException) { MessageBox.Show(this, localization.strings.ResourceManager.GetString("clipboard_busy")); }
+                    try { Clipboard.SetDataObject(item.Text, true, 0, 0); }
+                    catch (ExternalException) { Logger.Report(localization.strings.ResourceManager.GetString("clipboard_busy")); }
                 });
                 if (diagnostics.DropDownItems.Count == 50)
                 {
@@ -566,9 +575,10 @@ namespace IdleMasterExtended
             }
             else diagnostics.DropDownItems.Remove(item);
 
-            item.Count++;
+            item.Count += occurrences;
             string attempts = string.Format(localization.strings.ResourceManager.GetString("failure_count"), item.Count);
-            item.Text = $"{DateTime.Now:T}  {badge} (AppID {badge.AppId}) — {reason} ({attempts})";
+            string source = badge == null ? "" : $"{badge} (AppID {appId}) — ";
+            item.Text = $"{DateTime.Now:T}  {source}{reason} ({attempts})";
             diagnostics.DropDownItems.Insert(0, item);
             diagnostics.Text = $"Diagnostics ({diagnostics.DropDownItems.Count})";
             diagnostics.Visible = true;
@@ -1483,6 +1493,7 @@ namespace IdleMasterExtended
 
         private void tmrCheckCookieData_Tick(object sender, EventArgs e)
         {
+            foreach (var error in Logger.Drain()) RecordDiagnostic(null, error.Key, error.Value);
             // JN: White icons
             var whiteIcons = Settings.Default.whiteIcons;
             var imgFalse = whiteIcons ? Resources.imgFalse_w : Resources.imgFalse;

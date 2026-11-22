@@ -39,7 +39,7 @@ namespace IdleMasterExtended
             {
                 if (cboLanguage.Text != Settings.Default.language)
                 {
-                    MessageBox.Show(localization.strings.please_restart);
+                    Logger.Report(localization.strings.please_restart);
                 }
                 Settings.Default.language = cboLanguage.Text;
             }
