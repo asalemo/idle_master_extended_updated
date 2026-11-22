@@ -128,6 +128,8 @@
     <Compile Include="..\..\steam-idle Source\steam-idle\HelperExitCode.cs"><Link>HelperExitCode.cs</Link></Compile>
     <Compile Include="GameTestForm.cs" />
     <Compile Include="InstalledGames.cs" />
+    <Compile Include="InterfaceLanguage.cs" />
+    <Compile Include="SteamBrowserSession.cs" />
     <Compile Include="Badge.cs" />
     <Compile Include="CookieClient.cs">
       <SubType>Component</SubType>
@@ -331,6 +333,7 @@
     <None Include="Resources\trash-2x.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4370.26" />
     <PackageReference Include="HtmlAgilityPack">
       <Version>1.11.42</Version>
     </PackageReference>
@@ -342,7 +345,7 @@ XCOPY /Y /D "$(SolutionDir)..\Dependencies\steam_api64.dll" "$(TargetDir)"
 
 RMDIR /S /Q "$(TargetDir)Languages"
 MKDIR "$(TargetDir)Languages"
-FOR /F %25%25X IN ('DIR /B /AD $(TargetDir)') DO IF /I NOT "%25%25X"=="Languages" MOVE /Y "$(TargetDir)%25%25X" "$(TargetDir)Languages"
+FOR /F %25%25X IN ('DIR /B /AD &quot;$(TargetDir)&quot;') DO IF EXIST "$(TargetDir)%25%25X\IdleMasterExtended.resources.dll" MOVE /Y "$(TargetDir)%25%25X" "$(TargetDir)Languages"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

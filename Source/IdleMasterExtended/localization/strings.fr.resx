@@ -376,4 +376,12 @@ celles-ci peuvent être utilisées par un pirate pour se connecter à votre comp
   <data name="badge_timing" xml:space="preserve"><value>Pages : {0} · Requêtes Steam : {1:F0} ms · Traitement local : {2:F0} ms</value></data>
   <data name="helper_timing" xml:space="preserve"><value>Première confirmation de Steam : {0}</value></data>
   <data name="helper_runtime_failure" xml:space="preserve"><value>Le programme auxiliaire s’est arrêté. Vérifie le jeu puis réessaie.</value></data>
+  <data name="windows_language" xml:space="preserve"><value>Langue de Windows</value></data>
+  <data name="browser_signin" xml:space="preserve"><value>Se connecter avec Steam</value></data>
+  <data name="browser_use_account" xml:space="preserve"><value>Utiliser ce compte Steam</value></data>
+  <data name="browser_wait" xml:space="preserve"><value>Connecte-toi à Steam, puis confirme ton compte ci-dessous.</value></data>
+  <data name="browser_unavailable" xml:space="preserve"><value>Connexion Steam indisponible. Vérifie le runtime Microsoft Edge WebView2 ou utilise la saisie manuelle dans les paramètres.</value></data>
+  <data name="browser_account" xml:space="preserve"><value>Compte Steam · {0}</value></data>
+  <data name="sign_out_before_edit" xml:space="preserve"><value>Déconnecte-toi avant de saisir une autre session Steam.</value></data>
+  <data name="manual_fields_help" xml:space="preserve"><value>Aide à la connexion</value></data>
 </root>

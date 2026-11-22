@@ -4,6 +4,12 @@
 
 Ce fork Windows d’Idle Master Extended repère les jeux de ta bibliothèque Steam qui ont encore des cartes à distribuer. Il utilise le programme auxiliaire `steam-idle.exe` pour signaler une activité en jeu à Steam. Steam détermine le moment où les cartes sont distribuées.
 
+## Connexion et langue sur la branche develop
+
+Dans la version compilée depuis cette branche, clique sur **Se connecter**, connecte-toi sur la page officielle de Steam, puis choisis **Utiliser ce compte Steam**. La fenêtre affiche le SteamID public du compte. La connexion privée via Microsoft Edge WebView2 dure jusqu’à la déconnexion ou à la fermeture de l’application. Les champs manuels restent accessibles dans les paramètres. La RC2 utilise encore le parcours manuel.
+
+Dans **Fichier → Réglages**, choisis **Langue de Windows** ou le nom d’une langue, puis redémarre l’application.
+
 ## Utilisation
 
 1. Ouvre le client Steam sur Windows 64 bits et connecte-toi.
@@ -22,7 +28,7 @@ Les versions publiées pour ce fork figurent sur la [page des versions](https://
 
 **Fichier → Tester un jeu** recherche les titres installés. Le démarrage du test suspend la file automatique. Arrête le test ou ferme sa fenêtre, puis reprends la file quand tu le souhaites. **Fichier → Temps mesurés** affiche les délais. Les erreurs répétées sont regroupées dans **Diagnostics** et le programme auxiliaire fonctionne sans fenêtre.
 
-Guides en anglais · [Tester un seul jeu](https://github.com/asalemo/idle_master_extended_updated/wiki/Test-a-single-game) · [Lire les erreurs dans Diagnostics](https://github.com/asalemo/idle_master_extended_updated/wiki/Diagnostics-and-recovery)
+[Tester un seul jeu](https://github.com/asalemo/idle_master_extended_updated/wiki/Tester-un-seul-jeu) · [Lire les erreurs dans Diagnostics](https://github.com/asalemo/idle_master_extended_updated/wiki/Lire-les-erreurs-dans-Diagnostics)
 
 ## Diagnostic des fermetures
 

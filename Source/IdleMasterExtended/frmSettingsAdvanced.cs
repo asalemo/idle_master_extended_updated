@@ -16,6 +16,7 @@ namespace IdleMasterExtended
 
         private void btnView_Click(object sender, EventArgs e)
         {
+            txtSessionID.UseSystemPasswordChar = txtSteamLoginSecure.UseSystemPasswordChar = txtSteamParental.UseSystemPasswordChar = false;
             txtSessionID.PasswordChar = '\0';
             txtSteamLoginSecure.PasswordChar = '\0';
             txtSteamParental.PasswordChar = '\0';
@@ -32,6 +33,8 @@ namespace IdleMasterExtended
             // Localize Form
             btnUpdate.Text = localization.strings.update;
             this.Text = localization.strings.auth_data;
+            linkLabelWhatIsThis.Text = localization.strings.ResourceManager.GetString("manual_fields_help");
+            linkLabelWhatIsThis.Left = ClientSize.Width - linkLabelWhatIsThis.PreferredWidth - 12;
             ttHelp.SetToolTip(btnView, localization.strings.cookie_warning);
 
             // Read settings
@@ -59,7 +62,7 @@ namespace IdleMasterExtended
             }
             else
             {
-                txtSessionID.PasswordChar = '\0';
+                txtSessionID.UseSystemPasswordChar = true;
             }
 
             if (!string.IsNullOrWhiteSpace(Settings.Default.steamLoginSecure))
@@ -69,7 +72,7 @@ namespace IdleMasterExtended
             }
             else
             {
-                txtSteamLoginSecure.PasswordChar = '\0';
+                txtSteamLoginSecure.UseSystemPasswordChar = true;
             }
 
             if (!string.IsNullOrWhiteSpace(Settings.Default.steamparental))
@@ -79,8 +82,8 @@ namespace IdleMasterExtended
             }
             else
             {
-                txtSteamParental.PasswordChar = '\0';
-                txtSteamParental.Text = "(typically not required)";
+                txtSteamParental.UseSystemPasswordChar = true;
+                txtSteamParental.Clear();
             }
 
             if (txtSessionID.Enabled && txtSteamLoginSecure.Enabled && txtSteamParental.Enabled)

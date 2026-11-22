@@ -35,13 +35,11 @@ namespace IdleMasterExtended
                 Settings.Default.sort = "mostcards";
             }
 
-            if (cboLanguage.Text != "")
+            var selectedLanguage = cboLanguage.SelectedItem as string;
+            if (selectedLanguage != null && Settings.Default.language != selectedLanguage)
             {
-                if (cboLanguage.Text != Settings.Default.language)
-                {
-                    Logger.Report(localization.strings.please_restart);
-                }
-                Settings.Default.language = cboLanguage.Text;
+                Settings.Default.language = selectedLanguage;
+                Logger.Report(localization.strings.please_restart);
             }
 
             Settings.Default.OneThenMany = Settings.Default.OnlyOneGameIdle 
@@ -78,24 +76,10 @@ namespace IdleMasterExtended
 
         private void frmSettings_Load(object sender, EventArgs e)
         {
-            if (Settings.Default.language != "")
-            {
-                cboLanguage.SelectedItem = Settings.Default.language;
-            }
-            else
-            {
-                switch (Thread.CurrentThread.CurrentUICulture.EnglishName)
-                {
-                    case "Chinese (Simplified, China)":
-                    case "Chinese (Traditional, China)":
-                    case "Portuguese (Brazil)":
-                        cboLanguage.SelectedItem = Thread.CurrentThread.CurrentUICulture.EnglishName;
-                        break;
-                    default:
-                        cboLanguage.SelectedItem = Regex.Replace(Thread.CurrentThread.CurrentUICulture.EnglishName, @"\(.+\)", "").Trim();
-                        break;
-                }
-            }
+            cboLanguage.Items.Insert(0, string.Empty);
+            cboLanguage.Format += (control, item) => item.Value = InterfaceLanguage.DisplayName((string)item.ListItem);
+            cboLanguage.SelectedIndex = Math.Max(0, cboLanguage.Items.IndexOf(Settings.Default.language));
+            cboLanguage.DropDownWidth = 240;
 
             switch (Settings.Default.sort)
             {
@@ -248,6 +232,11 @@ namespace IdleMasterExtended
 
         private void btnAdvanced_Click(object sender, EventArgs e)
         {
+            if (SteamBrowserSession.Active != null)
+            {
+                Logger.Report(localization.strings.ResourceManager.GetString("sign_out_before_edit"));
+                return;
+            }
             var frm = new frmSettingsAdvanced();
             frm.ShowDialog();
         }

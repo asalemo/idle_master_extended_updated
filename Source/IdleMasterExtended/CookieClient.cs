@@ -32,6 +32,12 @@ namespace IdleMasterExtended
         /// <returns>The HTML content of the HTTP GET response</returns>
         public static async Task<string> GetHttpAsync(string url, int count = 3)
         {
+            var session = SteamBrowserSession.Active;
+            if (session != null)
+            {
+                string page = await session.ReadAsync(url);
+                return page == "EXPIRED" ? string.Empty : page;
+            }
             for (int attempt = 0; attempt <= count; attempt++)
             {
                 using (var client = new CookieClient())
@@ -53,6 +59,13 @@ namespace IdleMasterExtended
 
         internal static async Task<SessionStatus> CheckSessionAsync()
         {
+            var session = SteamBrowserSession.Active;
+            if (session != null)
+            {
+                var result = await session.ReadAsync(session.ProfileUrl);
+                if (result == "EXPIRED") return SessionStatus.Expired;
+                return result == "CONNECTED" ? SessionStatus.Connected : SessionStatus.Unavailable;
+            }
             using (var client = new CookieClient())
             {
                 try

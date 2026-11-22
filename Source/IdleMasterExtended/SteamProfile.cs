@@ -11,10 +11,15 @@ namespace IdleMasterExtended
     {
         internal static string GetSteamId()
         {
-            var steamid = WebUtility.UrlDecode(Settings.Default.steamLoginSecure);
-            var index = steamid.IndexOfAny(new[] { '|' }, 0);
-            return index != -1 ? steamid.Remove(index) : steamid;
+            if (SteamBrowserSession.Active != null) return SteamBrowserSession.Active.SteamId;
+            var value = WebUtility.UrlDecode(Settings.Default.steamLoginSecure ?? "");
+            var match = System.Text.RegularExpressions.Regex.Match(value, @"\A[0-9]{17}(?=\||\z)");
+            return match.Value;
         }
+
+        internal static string ProfileUrl => SteamBrowserSession.Active?.ProfileUrl ?? Settings.Default.myProfileURL;
+        internal static bool HasSession => SteamBrowserSession.Active != null ||
+            (!string.IsNullOrWhiteSpace(Settings.Default.sessionid) && !string.IsNullOrWhiteSpace(Settings.Default.steamLoginSecure));
 
         internal static string GetSteamUrl()
         {

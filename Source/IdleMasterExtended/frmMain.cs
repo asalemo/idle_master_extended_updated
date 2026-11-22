@@ -122,7 +122,7 @@ namespace IdleMasterExtended
                 catch (Exception ex)
                 {
                     if (session != idleSession) return;
-                    Logger.Exception(ex, "Badge -> LoadBadgesAsync, for profile = " + Settings.Default.myProfileURL);
+                    Logger.Exception(ex, "Badge -> LoadBadgesAsync, for profile = " + SteamProfile.ProfileUrl);
                     ResetFormDesign();
                     ReloadCount = 1;
                     tmrBadgeReload.Enabled = true;
@@ -135,7 +135,7 @@ namespace IdleMasterExtended
 
         private async Task<string> GetBadgePageAsync(int pageNumber)
         {
-            var profileLink = Settings.Default.myProfileURL + "/badges";
+            var profileLink = SteamProfile.ProfileUrl + "/badges";
             var pageURL = string.Format("{0}/?p={1}", profileLink, pageNumber);
             var response = await CookieClient.GetHttpAsync(pageURL);
             CheckIfResponseIsNullWithRetryCount(response);
@@ -144,19 +144,18 @@ namespace IdleMasterExtended
 
         private static int ExtractTotalBadgePages(HtmlDocument document)
         {
-            // If user is authenticated, check page count. If user is not authenticated, pages are different.
-            var pages = new List<string>() { "?p=1" };
-            var pageNodes = document.DocumentNode.SelectNodes("//a[@class=\"pagelink\"]");
-            if (pageNodes != null)
+            int lastPage = 1;
+            var links = document.DocumentNode.SelectNodes("//a[@class='pagelink']");
+            if (links == null) return lastPage;
+            foreach (var link in links)
             {
-                pages.AddRange(pageNodes.Select(p => p.Attributes["href"].Value).Distinct());
-                pages = pages.Distinct().ToList();
+                string href = WebUtility.HtmlDecode(link.GetAttributeValue("href", ""));
+                var page = Regex.Match(href, @"[?&]p=(\d+)(?:&|#|$)");
+                if (int.TryParse(page.Groups[1].Value, out int value)) lastPage = Math.Max(lastPage, value);
             }
-
-            string lastpage = pages.Last().ToString().Replace("?p=", "");
-            int pagesCount = Convert.ToInt32(lastpage);
-            return pagesCount;
+            return lastPage;
         }
+
         public void SortBadges(string method)
         {
             lblDrops.Text = localization.strings.sorting_results;
@@ -189,7 +188,10 @@ namespace IdleMasterExtended
         /// <param name="document">HTML document (1 page) from x</param>
         private void ProcessBadgesOnPage(HtmlDocument document, Dictionary<string, Badge> byId)
         {
-            foreach (var badge in document.DocumentNode.SelectNodes("//div[@class=\"badge_row is_link\"]"))
+            var rows = document.DocumentNode.SelectNodes("//div[@class='badge_row is_link']");
+            if (rows == null && document.DocumentNode.SelectSingleNode("//div[@class='badges_sheet']") != null) return;
+            if (rows == null) throw new InvalidDataException("Unrecognized Steam badge page.");
+            foreach (var badge in rows)
             {
                 var appIdNode = badge.SelectSingleNode(".//a[@class=\"badge_row_overlay\"]").Attributes["href"].Value;
                 var appid = Regex.Match(appIdNode, @"gamecards/(\d+)/").Groups[1].Value;
@@ -319,7 +321,7 @@ namespace IdleMasterExtended
 
             // Check if user is authenticated and if any badge left to idle
             // There should be check for IsCookieReady, but property is set in timer tick, so it could take some time to be set.
-            if (string.IsNullOrWhiteSpace(Settings.Default.sessionid) || !IsSteamReady)
+            if (!SteamProfile.HasSession || !IsSteamReady)
             {
                 StopIdle();
                 tmrReadyToGo.Enabled = true;
@@ -422,7 +424,7 @@ namespace IdleMasterExtended
 
             // Check if user is authenticated and if any badge left to idle
             // There should be check for IsCookieReady, but property is set in timer tick, so it could take some time to be set.
-            if (string.IsNullOrWhiteSpace(Settings.Default.sessionid) || !IsSteamReady)
+            if (!SteamProfile.HasSession || !IsSteamReady)
             {
                 StopIdle();
                 tmrReadyToGo.Enabled = true;
@@ -856,6 +858,7 @@ namespace IdleMasterExtended
         /// </summary>
         private void ResetClientStatus()
         {
+            SteamBrowserSession.Disconnect();
             // Clear the settings
             Settings.Default.sessionid = string.Empty;
             Settings.Default.steamLogin = string.Empty;
@@ -928,99 +931,7 @@ namespace IdleMasterExtended
                 Settings.Default.Save();
             }
 
-            // Set the interface language from the settings
-            if (Settings.Default.language != "")
-            {
-                string language_string = "";
-                switch (Settings.Default.language)
-                {
-                    case "Bulgarian":
-                        language_string = "bg";
-                        break;
-                    case "Chinese (Simplified, China)":
-                        language_string = "zh-CN";
-                        break;
-                    case "Chinese (Traditional, China)":
-                        language_string = "zh-TW";
-                        break;
-                    case "Czech":
-                        language_string = "cs";
-                        break;
-                    case "Danish":
-                        language_string = "da";
-                        break;
-                    case "Dutch":
-                        language_string = "nl";
-                        break;
-                    case "English":
-                        language_string = "en";
-                        break;
-                    case "Finnish":
-                        language_string = "fi";
-                        break;
-                    case "French":
-                        language_string = "fr";
-                        break;
-                    case "German":
-                        language_string = "de";
-                        break;
-                    case "Greek":
-                        language_string = "el";
-                        break;
-                    case "Hungarian":
-                        language_string = "hu";
-                        break;
-                    case "Italian":
-                        language_string = "it";
-                        break;
-                    case "Japanese":
-                        language_string = "ja";
-                        break;
-                    case "Korean":
-                        language_string = "ko";
-                        break;
-                    case "Norwegian":
-                        language_string = "no";
-                        break;
-                    case "Polish":
-                        language_string = "pl";
-                        break;
-                    case "Portuguese":
-                        language_string = "pt-PT";
-                        break;
-                    case "Portuguese (Brazil)":
-                        language_string = "pt-BR";
-                        break;
-                    case "Romanian":
-                        language_string = "ro";
-                        break;
-                    case "Russian":
-                        language_string = "ru";
-                        break;
-                    case "Spanish":
-                        language_string = "es";
-                        break;
-                    case "Swedish":
-                        language_string = "sv";
-                        break;
-                    case "Thai":
-                        language_string = "th";
-                        break;
-                    case "Turkish":
-                        language_string = "tr";
-                        break;
-                    case "Ukrainian":
-                        language_string = "uk";
-                        break;
-                    case "Croatian":
-                        language_string = "hr";
-                        break;
-                    default:
-                        language_string = "en";
-                        break;
-                }
-                Thread.CurrentThread.CurrentUICulture = new CultureInfo(language_string);
-            }
+            InterfaceLanguage.Apply(Settings.Default.language);
 
             retryHelpers.Text = localization.strings.ResourceManager.GetString("helper_retry_now");
             fileToolStripMenuItem.DropDownItems.Insert(0, new ToolStripMenuItem(
@@ -1089,6 +1000,7 @@ namespace IdleMasterExtended
 
         private void frmMain_FormClose(object sender, FormClosedEventArgs e)
         {
+            SteamBrowserSession.Disconnect();
             StopIdle();
         }
 
@@ -1342,10 +1254,24 @@ namespace IdleMasterExtended
             ResetClientStatus();
         }
 
-        private void lnkSignIn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private async void lnkSignIn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var frm = new frmSettingsAdvanced();
-            frm.ShowDialog();
+            try
+            {
+                if (!await SteamBrowserSession.ConnectAsync(this) || IsDisposed) return;
+                StopIdle();
+                AllBadges.Clear();
+                ReloadCount = 0;
+                tmrBadgeReload.Stop();
+                tmrReadyToGo.Interval = 100;
+                tmrReadyToGo.Start();
+                lblSignedOnAs.Text = string.Format(localization.strings.ResourceManager.GetString("browser_account"), SteamProfile.GetSteamId());
+                lblSignedOnAs.Visible = Settings.Default.showUsername;
+            }
+            catch (Exception)
+            {
+                Logger.Report(localization.strings.ResourceManager.GetString("browser_unavailable"));
+            }
         }
 
         private void lnkLatestRelease_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -1475,7 +1401,7 @@ namespace IdleMasterExtended
                 if (session != idleSession) return;
                 // Check if user is authenticated and if any badge left to idle
                 // There should be check for IsCookieReady, but property is set in timer tick, so it could take some time to be set.
-                if (!string.IsNullOrWhiteSpace(Settings.Default.sessionid) && IsSteamReady && CanIdleBadges.Any() && TimeLeft != 0)
+                if (SteamProfile.HasSession && IsSteamReady && CanIdleBadges.Any() && TimeLeft != 0)
                 {
                     EnableCardDropCheckTimer();
                 }
@@ -1500,7 +1426,8 @@ namespace IdleMasterExtended
             var imgTrue = whiteIcons ? Resources.imgTrue_w : Resources.imgTrue;
             SetTheme();
 
-            var connected = !string.IsNullOrWhiteSpace(Settings.Default.sessionid) && !string.IsNullOrWhiteSpace(Settings.Default.steamLoginSecure);
+            if (SteamBrowserSession.Active?.Expired == true) ResetClientStatus();
+            var connected = SteamProfile.HasSession;
 
             var colorGreen = Settings.Default.customTheme ? Settings.Default.colorSteamGreen : Color.Green; // Adjust the green depending on the theme
 

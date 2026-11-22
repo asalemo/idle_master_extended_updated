@@ -10,6 +10,12 @@ Idle Master checks your Steam badges for remaining trading card drops and starts
 2. Open Steam and sign in. Run `IdleMasterExtended.exe` from the extracted folder with `steam-idle.exe`, the DLLs and `Languages` beside it.
 3. Use the sign-in link to configure your Steam Community session. Choose an idling mode in **File → Settings**.
 
+## Sign-in and language on develop
+
+In a build from this branch, select **Sign in**, complete sign-in on Steam’s official page, then select **Use this Steam account**. The window shows your public SteamID. This private Microsoft Edge WebView2 session lasts until sign-out or application exit. Manual session fields remain available in Settings. The RC2 download still uses manual sign-in.
+
+In **File → Settings**, choose **Windows language** or a language by its native name, then restart the application.
+
 ## What to expect
 
 Fast mode runs up to 30 eligible games in parallel while they are below two recorded hours. It checks progress every five minutes. Once a game qualifies for individual idling, or only one remains, it stays active between checks.
