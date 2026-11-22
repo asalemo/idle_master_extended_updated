@@ -42,6 +42,9 @@ namespace IdleMasterExtended
         public int GamesRemaining { get { return CanIdleBadges.Count(); } }
         public Badge CurrentBadge;
 
+        private string lastBadgeTiming;
+        private TimeSpan? firstConfirmation;
+        private readonly Stopwatch firstHelperClock = new Stopwatch();
         private bool pausedForTest;
         private int idleSession;
         private bool IsCurrentThemeCustom;
@@ -89,12 +92,20 @@ namespace IdleMasterExtended
             {
                 try
                 {
-                    HtmlDocument htmlDocument;
+                    var fetch = new Stopwatch();
+                    var parse = Stopwatch.StartNew();
+                    var byId = AllBadges.ToDictionary(b => b.StringId);
+                    parse.Stop();
                     int totalBadgePages = 1;
 
                     for (var currentBadgePage = 1; currentBadgePage <= totalBadgePages; currentBadgePage++)
                     {
-                        htmlDocument = await GetBadgePageAsync(currentBadgePage);
+                        fetch.Start();
+                        string response = await GetBadgePageAsync(currentBadgePage);
+                        fetch.Stop();
+                        parse.Start();
+                        var htmlDocument = new HtmlDocument();
+                        htmlDocument.LoadHtml(response);
                         if (session != idleSession) return;
                         if (currentBadgePage == 1)
                         {
@@ -102,8 +113,11 @@ namespace IdleMasterExtended
                         }
 
                         lblDrops.Text = string.Format(localization.strings.reading_badge_page + " {0}/{1}, " + localization.strings.please_wait, currentBadgePage, totalBadgePages);
-                        ProcessBadgesOnPage(htmlDocument);
+                        ProcessBadgesOnPage(htmlDocument, byId);
+                        parse.Stop();
                     }
+                    lastBadgeTiming = string.Format(localization.strings.ResourceManager.GetString("badge_timing"),
+                        totalBadgePages, fetch.Elapsed.TotalMilliseconds, parse.Elapsed.TotalMilliseconds);
                 }
                 catch (Exception ex)
                 {
@@ -119,16 +133,13 @@ namespace IdleMasterExtended
             ResetRetryCountAndUpdateApplicationState();
         }
 
-        private async Task<HtmlDocument> GetBadgePageAsync(int pageNumber)
+        private async Task<string> GetBadgePageAsync(int pageNumber)
         {
-            var document = new HtmlDocument();
             var profileLink = Settings.Default.myProfileURL + "/badges";
             var pageURL = string.Format("{0}/?p={1}", profileLink, pageNumber);
             var response = await CookieClient.GetHttpAsync(pageURL);
             CheckIfResponseIsNullWithRetryCount(response);
-            document.LoadHtml(response);
-
-            return document;
+            return response;
         }
 
         private static int ExtractTotalBadgePages(HtmlDocument document)
@@ -176,7 +187,7 @@ namespace IdleMasterExtended
         /// Processes all badges on page
         /// </summary>
         /// <param name="document">HTML document (1 page) from x</param>
-        private void ProcessBadgesOnPage(HtmlDocument document)
+        private void ProcessBadgesOnPage(HtmlDocument document, Dictionary<string, Badge> byId)
         {
             foreach (var badge in document.DocumentNode.SelectNodes("//div[@class=\"badge_row is_link\"]"))
             {
@@ -197,15 +208,15 @@ namespace IdleMasterExtended
                 var cardNode = badge.SelectSingleNode(".//span[@class=\"progress_info_bold\"]");
                 var cards = cardNode == null ? string.Empty : Regex.Match(cardNode.InnerText, @"[0-9]+").Value;
 
-                var badgeInMemory = AllBadges.FirstOrDefault(b => b.StringId == appid);
-
-                if (badgeInMemory != null)
+                if (byId.TryGetValue(appid, out var badgeInMemory))
                 {
                     badgeInMemory.UpdateStats(cards, hours);
                 }
                 else
                 {
-                    AllBadges.Add(new Badge(appid, name, cards, hours));
+                    var added = new Badge(appid, name, cards, hours);
+                    AllBadges.Add(added);
+                    byId.Add(appid, added);
                 }
             }
         }
@@ -362,6 +373,7 @@ namespace IdleMasterExtended
         public void StopIdle()
         {
             idleSession++;
+            firstHelperClock.Reset();
             helperMonitor.Stop();
             desiredHelpers.Clear();
             retryAt.Clear();
@@ -457,6 +469,11 @@ namespace IdleMasterExtended
             }
             retryHelpers.Visible = retryAt.Count > 0;
             int ready = desiredHelpers.Count(b => b.SteamReady && b.InIdle);
+            if (ready > 0 && firstHelperClock.IsRunning)
+            {
+                firstHelperClock.Stop();
+                firstConfirmation = firstHelperClock.Elapsed;
+            }
             if (retryAt.Count > 0)
             {
                 var next = retryAt.OrderBy(p => p.Value).First();
@@ -478,6 +495,11 @@ namespace IdleMasterExtended
 
         private void StartHelper(Badge badge)
         {
+            if (desiredHelpers.Count == 0)
+            {
+                firstConfirmation = null;
+                firstHelperClock.Restart();
+            }
             desiredHelpers.Add(badge);
             helperMonitor.Start();
             if (retryAt.ContainsKey(badge)) return;
@@ -997,6 +1019,14 @@ namespace IdleMasterExtended
                     using (var test = new GameTestForm(PauseForGameTest, RecordHelperFailure))
                         test.ShowDialog(this);
                 }));
+            fileToolStripMenuItem.DropDownItems.Add(localization.strings.ResourceManager.GetString("timings"), null, (menu, args) =>
+            {
+                var pending = localization.strings.ResourceManager.GetString("timing_pending");
+                var helper = firstConfirmation.HasValue ? string.Format("{0:F1} s", firstConfirmation.Value.TotalSeconds) : pending;
+                MessageBox.Show(this, (lastBadgeTiming ?? pending) + Environment.NewLine +
+                    string.Format(localization.strings.ResourceManager.GetString("helper_timing"), helper),
+                    localization.strings.ResourceManager.GetString("timings"));
+            });
             // Localize form elements
             fileToolStripMenuItem.Text = localization.strings.file;
             gameToolStripMenuItem.Text = localization.strings.game;

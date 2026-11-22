@@ -372,4 +372,8 @@ your Steam account.</value>
   <data name="test_confirmed" xml:space="preserve"><value>{0} (AppID {1}) — Steam confirmed in {2:F2} s.</value></data>
   <data name="test_matches" xml:space="preserve"><value>Matching installed titles: {0}</value></data>
   <data name="test_stopped" xml:space="preserve"><value>Stopped</value></data>
+  <data name="timings" xml:space="preserve"><value>Timings</value></data>
+  <data name="timing_pending" xml:space="preserve"><value>No measurement yet</value></data>
+  <data name="badge_timing" xml:space="preserve"><value>Pages: {0} · Steam requests: {1:F0} ms · Local processing: {2:F0} ms</value></data>
+  <data name="helper_timing" xml:space="preserve"><value>First helper confirmation: {0}</value></data>
 </root>

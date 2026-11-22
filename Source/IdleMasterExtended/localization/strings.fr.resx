@@ -371,4 +371,8 @@ celles-ci peuvent être utilisées par un pirate pour se connecter à votre comp
   <data name="test_confirmed" xml:space="preserve"><value>{0} (AppID {1}) — Confirmé par Steam en {2:F2} s.</value></data>
   <data name="test_matches" xml:space="preserve"><value>Titres installés correspondants : {0}</value></data>
   <data name="test_stopped" xml:space="preserve"><value>Arrêté</value></data>
+  <data name="timings" xml:space="preserve"><value>Temps mesurés</value></data>
+  <data name="timing_pending" xml:space="preserve"><value>Aucune mesure disponible</value></data>
+  <data name="badge_timing" xml:space="preserve"><value>Pages : {0} · Requêtes Steam : {1:F0} ms · Traitement local : {2:F0} ms</value></data>
+  <data name="helper_timing" xml:space="preserve"><value>Première confirmation de Steam : {0}</value></data>
 </root>
