@@ -10,7 +10,7 @@ Clique sur **Se connecter**, puis choisis **Se connecter avec Steam** ou **Saisi
 
 ## Guide et langue de l’interface
 
-[Guide RC4 : se connecter à Steam, changer de langue et tester un seul jeu](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas)
+[Guide RC4 : se connecter à Steam, changer de langue et tester un seul jeu](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas) · [Tester les deux modes de connexion et vérifier les données conservées après fermeture](https://github.com/asalemo/idle_master_extended_updated/wiki/Verifier-la-confidentialite-RC4)
 
 Dans **Fichier → Réglages**, choisis **Langue de Windows** ou le nom d’une langue, puis redémarre l’application.
 La connexion Steam, le test d’un jeu et les diagnostics sont disponibles en français, anglais, allemand, espagnol, italien et portugais (Portugal et Brésil). Pour les autres langues de l’interface, les textes qui restent à traduire s’affichent en anglais.

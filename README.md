@@ -6,7 +6,7 @@ Idle Master checks your Steam badges for remaining trading card drops and starts
 
 ## Get started
 
-[RC4 guide: sign in to Steam, change language and test one game](https://github.com/asalemo/idle_master_extended_updated/wiki/Getting-started)
+[RC4 guide: sign in to Steam, change language and test one game](https://github.com/asalemo/idle_master_extended_updated/wiki/Getting-started) · [Test both sign-in methods and check what remains after exit](https://github.com/asalemo/idle_master_extended_updated/wiki/RC4-sign-in-privacy-test)
 
 1. Download the **win-x64 ZIP** from the release and extract the entire archive. The GitHub source archives are for developers.
 2. Open Steam and sign in. Run `IdleMasterExtended.exe` from the extracted folder with `steam-idle.exe`, the DLLs, `runtimes` and `Languages` beside it.
