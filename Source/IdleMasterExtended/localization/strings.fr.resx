@@ -397,4 +397,5 @@ celles-ci peuvent être utilisées par un pirate pour se connecter à votre comp
   <data name="manual_signin" xml:space="preserve"><value>Saisir les informations de session</value></data>
   <data name="cards_stalled_next" xml:space="preserve"><value>{0} cartes restantes depuis {1} h {2} min. Passage au jeu suivant.</value></data>
   <data name="cards_stalled_only" xml:space="preserve"><value>{0} cartes restantes depuis {1} h {2} min. Seul ce jeu est admissible.</value></data>
+  <data name="rotation_delay_minutes" xml:space="preserve"><value>Changer si le compteur reste inchangé (min)</value></data>
 </root>

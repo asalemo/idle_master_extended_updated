@@ -4,6 +4,9 @@ namespace IdleMasterExtended.Properties
 {
     internal sealed partial class Settings
     {
+        internal const int MaxRotationMinutes = 1440;
+        internal int EffectiveRotationMinutes => RotationMinutes >= 1 && RotationMinutes <= MaxRotationMinutes ? RotationMinutes : 120;
+
         internal void LoadPreferences()
         {
             bool upgrade = updateNeeded;

@@ -14,7 +14,15 @@ namespace IdleMasterExtended
             Reported = false;
         }
 
-        internal TimeSpan? Observe(int count, TimeSpan now)
+        internal int NextCheckSeconds(int normalSeconds, TimeSpan now, TimeSpan threshold)
+        {
+            if (lastCount <= 0) return Math.Min(normalSeconds, (int)threshold.TotalSeconds);
+            var remaining = threshold - (now - since);
+            if (remaining <= TimeSpan.Zero) return normalSeconds;
+            return Math.Min(normalSeconds, (int)Math.Ceiling(remaining.TotalSeconds));
+        }
+
+        internal TimeSpan? Observe(int count, TimeSpan now, TimeSpan threshold)
         {
             if (count <= 0 || count != lastCount)
             {
@@ -24,7 +32,7 @@ namespace IdleMasterExtended
                 return null;
             }
             var elapsed = now - since;
-            return elapsed >= TimeSpan.FromHours(2) ? elapsed : (TimeSpan?)null;
+            return elapsed >= threshold ? elapsed : (TimeSpan?)null;
         }
     }
 }

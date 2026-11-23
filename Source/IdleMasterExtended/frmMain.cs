@@ -224,6 +224,7 @@ namespace IdleMasterExtended
         }
 
         private readonly Stopwatch sessionClock = Stopwatch.StartNew();
+        private static TimeSpan RotationThreshold => TimeSpan.FromMinutes(Settings.Default.EffectiveRotationMinutes);
         private readonly DropProgress dropProgress = new DropProgress();
         private readonly List<int> deferredGames = new List<int>();
 
@@ -254,7 +255,7 @@ namespace IdleMasterExtended
                 return;
             }
             if (TryAdvanceStalledGame(badge)) return;
-            TimeLeft = badge.RemainingCard == 1 ? 300 : 900;
+            TimeLeft = dropProgress.NextCheckSeconds(badge.RemainingCard == 1 ? 300 : 900, sessionClock.Elapsed, RotationThreshold);
 
             lblCurrentRemaining.Text = badge.RemainingCard == -1 ? "" : badge.RemainingCard + " " + localization.strings.card_drops_remaining;
             pbIdle.Maximum = CardsRemaining > pbIdle.Maximum ? CardsRemaining : pbIdle.Maximum;
@@ -271,7 +272,7 @@ namespace IdleMasterExtended
                 return false;
             }
 
-            var elapsed = dropProgress.Observe(badge.RemainingCard, sessionClock.Elapsed);
+            var elapsed = dropProgress.Observe(badge.RemainingCard, sessionClock.Elapsed, RotationThreshold);
             if (!elapsed.HasValue) return false;
             bool rotate = CanIdleBadges.Any(b => b.AppId != badge.AppId);
             if (rotate || !dropProgress.Reported)
@@ -671,7 +672,7 @@ namespace IdleMasterExtended
             EnableCardDropCheckTimer();
 
             // Reset the timer
-            TimeLeft = CurrentBadge.RemainingCard == 1 ? 300 : 900;
+            TimeLeft = 2; // Establish the first count promptly, including for short rotation delays.
 
             // Set the correct buttons on the form for pause / resume
             ShowInterruptiveButtons();
@@ -1227,8 +1228,10 @@ namespace IdleMasterExtended
             Boolean previous_behavior2 = Settings.Default.OneThenMany;
             Boolean previous_behavior3 = Settings.Default.fastMode;
             Boolean previous_behavior4 = Settings.Default.IdlingModeWhitelist;
-            Form frm = new frmSettings();
-            frm.ShowDialog();
+            int previousDelay = Settings.Default.EffectiveRotationMinutes;
+            using (var form = new frmSettings()) form.ShowDialog(this);
+            if (previousDelay != Settings.Default.EffectiveRotationMinutes && CurrentBadge != null)
+                TimeLeft = Math.Min(TimeLeft, 2);
 
             if (previous != Settings.Default.sort || previous_behavior != Settings.Default.OnlyOneGameIdle || previous_behavior2 != Settings.Default.OneThenMany
                 || previous_behavior3 != Settings.Default.fastMode || previous_behavior4 != Settings.Default.IdlingModeWhitelist)

@@ -398,5 +398,12 @@ namespace IdleMasterExtended.Properties {
                 this["IdlingModeWhitelist"] = value;
             }
         }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120")]
+        public int RotationMinutes {
+            get { return ((int)(this["RotationMinutes"])); }
+            set { this["RotationMinutes"] = value; }
+        }
     }
 }

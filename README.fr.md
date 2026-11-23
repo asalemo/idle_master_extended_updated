@@ -23,6 +23,10 @@ La connexion Steam, le test d’un jeu et les diagnostics sont disponibles en fr
 
 Les versions publiées pour ce fork figurent sur la [page des versions](https://github.com/asalemo/idle_master_extended_updated/releases). Pour tester une modification présente uniquement sur la branche `develop`, compile cette branche.
 
+## Délai de rotation réglable sur develop
+
+Dans **Fichier → Réglages**, règle **Changer si le compteur reste inchangé (min)** entre 1 et 1 440 minutes. Le délai par défaut est de 120 minutes. Pour un essai rapide, choisis 3 minutes et utilise la file automatique avec un jeu actif et au moins un autre jeu admissible. Diagnostics indique la durée observée lors du passage au jeu suivant. Tu peux ensuite rétablir 120 minutes.
+
 ## File automatique dans la RC5
 
 Quand un seul jeu est actif et que les vérifications réussies indiquent le même nombre positif de cartes pendant deux heures, la file passe au jeu suivant lors de la vérification. Diagnostics indique le jeu, le compteur et la durée. Le jeu reporté reste dans la file. Si lui seul est admissible, il reste actif. Une variation du compteur, une lecture en échec ou une pause remet la durée à zéro.

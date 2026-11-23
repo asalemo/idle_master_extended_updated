@@ -61,6 +61,8 @@ namespace IdleMasterExtended
             this.radOneGameOnly = new System.Windows.Forms.RadioButton();
             this.lblReadMore = new System.Windows.Forms.Label();
             this.lnkGitHubWiki = new System.Windows.Forms.LinkLabel();
+            this.lblRotationDelay = new Label();
+            this.rotationMinutes = new NumericUpDown();
             this.grpGeneral.SuspendLayout();
             this.grpPriority.SuspendLayout();
             this.grpIdlingQuantity.SuspendLayout();
@@ -211,7 +213,7 @@ namespace IdleMasterExtended
             // linkLabelAppData
             // 
             this.linkLabelAppData.AutoSize = true;
-            this.linkLabelAppData.Location = new System.Drawing.Point(43, 456);
+            this.linkLabelAppData.Location = new System.Drawing.Point(43, 486);
             this.linkLabelAppData.Name = "linkLabelAppData";
             this.linkLabelAppData.Size = new System.Drawing.Size(120, 13);
             this.linkLabelAppData.TabIndex = 6;
@@ -226,7 +228,7 @@ namespace IdleMasterExtended
             this.grpPriority.Controls.Add(this.radIdleLeastDrops);
             this.grpPriority.Controls.Add(this.radIdleMostDrops);
             this.grpPriority.Controls.Add(this.radIdleDefault);
-            this.grpPriority.Location = new System.Drawing.Point(12, 337);
+            this.grpPriority.Location = new System.Drawing.Point(12, 367);
             this.grpPriority.Name = "grpPriority";
             this.grpPriority.Size = new System.Drawing.Size(395, 96);
             this.grpPriority.TabIndex = 1;
@@ -272,7 +274,7 @@ namespace IdleMasterExtended
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(331, 451);
+            this.btnCancel.Location = new System.Drawing.Point(331, 481);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 2;
@@ -283,7 +285,7 @@ namespace IdleMasterExtended
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(250, 451);
+            this.btnOK.Location = new System.Drawing.Point(250, 481);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 3;
@@ -295,7 +297,7 @@ namespace IdleMasterExtended
             // 
             this.btnAdvanced.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnAdvanced.Image = global::IdleMasterExtended.Properties.Resources.imgLock;
-            this.btnAdvanced.Location = new System.Drawing.Point(12, 451);
+            this.btnAdvanced.Location = new System.Drawing.Point(12, 481);
             this.btnAdvanced.Name = "btnAdvanced";
             this.btnAdvanced.Size = new System.Drawing.Size(25, 23);
             this.btnAdvanced.TabIndex = 4;
@@ -313,11 +315,20 @@ namespace IdleMasterExtended
             this.grpIdlingQuantity.Controls.Add(this.radManyThenOne);
             this.grpIdlingQuantity.Controls.Add(this.radOneGameOnly);
             this.grpIdlingQuantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRotationDelay.AutoSize = true;
+            this.lblRotationDelay.Location = new System.Drawing.Point(5, 143);
+            this.rotationMinutes.Location = new System.Drawing.Point(315, 139);
+            this.rotationMinutes.Size = new System.Drawing.Size(73, 20);
+            this.rotationMinutes.Minimum = 1;
+            this.rotationMinutes.Maximum = Properties.Settings.MaxRotationMinutes;
+            this.rotationMinutes.TabIndex = 10;
+            this.grpIdlingQuantity.Controls.Add(this.lblRotationDelay);
+            this.grpIdlingQuantity.Controls.Add(this.rotationMinutes);
             this.grpIdlingQuantity.Location = new System.Drawing.Point(12, 193);
             this.grpIdlingQuantity.Margin = new System.Windows.Forms.Padding(2);
             this.grpIdlingQuantity.Name = "grpIdlingQuantity";
             this.grpIdlingQuantity.Padding = new System.Windows.Forms.Padding(2);
-            this.grpIdlingQuantity.Size = new System.Drawing.Size(395, 139);
+            this.grpIdlingQuantity.Size = new System.Drawing.Size(395, 169);
             this.grpIdlingQuantity.TabIndex = 5;
             this.grpIdlingQuantity.TabStop = false;
             this.grpIdlingQuantity.Text = "Idling Behavior";
@@ -400,7 +411,7 @@ namespace IdleMasterExtended
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(418, 486);
+            this.ClientSize = new System.Drawing.Size(418, 516);
             this.Controls.Add(this.lnkGitHubWiki);
             this.Controls.Add(this.lblReadMore);
             this.Controls.Add(this.linkLabelAppData);
@@ -433,6 +444,8 @@ namespace IdleMasterExtended
 
         #endregion
 
+        private Label lblRotationDelay;
+        private NumericUpDown rotationMinutes;
         private GroupBox grpGeneral;
         private CheckBox chkMinToTray;
         private GroupBox grpPriority;

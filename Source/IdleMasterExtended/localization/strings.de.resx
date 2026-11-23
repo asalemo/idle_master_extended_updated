@@ -392,4 +392,5 @@ um sich bei deinem Steam Account anzumelden!</value>
   <data name="manual_signin" xml:space="preserve"><value>Sitzungsdaten manuell eingeben</value></data>
   <data name="cards_stalled_next" xml:space="preserve"><value>Verbleibende Karten: {0}, unverändert seit {1} Std. {2} Min. Wechsel zum nächsten Spiel.</value></data>
   <data name="cards_stalled_only" xml:space="preserve"><value>Verbleibende Karten: {0}, unverändert seit {1} Std. {2} Min. Kein weiteres Spiel verfügbar.</value></data>
+  <data name="rotation_delay_minutes" xml:space="preserve"><value>Wechsel bei unverändertem Zähler (Min.)</value></data>
 </root>

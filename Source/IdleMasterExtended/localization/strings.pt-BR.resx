@@ -390,4 +390,5 @@ não compartilhe essa informação com ninguém, pois poderá ser usada por pess
   <data name="manual_signin" xml:space="preserve"><value>Inserir os dados da sessão</value></data>
   <data name="cards_stalled_next" xml:space="preserve"><value>Cartas restantes: {0}, sem alterações há {1} h {2} min. Passando para o próximo jogo.</value></data>
   <data name="cards_stalled_only" xml:space="preserve"><value>Cartas restantes: {0}, sem alterações há {1} h {2} min. Não há outro jogo disponível.</value></data>
+  <data name="rotation_delay_minutes" xml:space="preserve"><value>Trocar se a contagem não mudar (min)</value></data>
 </root>

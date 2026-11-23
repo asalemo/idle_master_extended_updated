@@ -101,5 +101,8 @@
     <Setting Name="IdlingModeWhitelist" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="RotationMinutes" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">120</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -390,4 +390,5 @@ Non condividere questa informazione con nessuno, in quanto potrebbe essere utili
   <data name="manual_signin" xml:space="preserve"><value>Inserisci i dati della sessione</value></data>
   <data name="cards_stalled_next" xml:space="preserve"><value>Carte rimanenti: {0}, da {1} h {2} min. Passaggio al gioco successivo.</value></data>
   <data name="cards_stalled_only" xml:space="preserve"><value>Carte rimanenti: {0}, da {1} h {2} min. Nessun altro gioco disponibile.</value></data>
+  <data name="rotation_delay_minutes" xml:space="preserve"><value>Cambia se il conteggio resta invariato (min)</value></data>
 </root>

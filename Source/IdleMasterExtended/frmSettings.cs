@@ -62,6 +62,7 @@ namespace IdleMasterExtended
                 Settings.Default.OnlyOneGameIdle = !radManyThenOne.Checked;
             }
 
+            Settings.Default.RotationMinutes = (int)rotationMinutes.Value;
             Settings.Default.minToTray = chkMinToTray.Checked;
             Settings.Default.ignoreclient = chkIgnoreClientStatus.Checked;
             Settings.Default.showUsername = chkShowUsername.Checked;
@@ -76,6 +77,9 @@ namespace IdleMasterExtended
 
         private void frmSettings_Load(object sender, EventArgs e)
         {
+            rotationMinutes.Value = Settings.Default.EffectiveRotationMinutes;
+            lblRotationDelay.Text = localization.strings.ResourceManager.GetString("rotation_delay_minutes");
+            rotationMinutes.AccessibleName = lblRotationDelay.Text;
             cboLanguage.Items.Insert(0, string.Empty);
             cboLanguage.Format += (control, item) => item.Value = InterfaceLanguage.DisplayName((string)item.ListItem);
             cboLanguage.SelectedIndex = Math.Max(0, cboLanguage.Items.IndexOf(Settings.Default.language));
@@ -215,6 +219,8 @@ namespace IdleMasterExtended
             grpGeneral.ForeColor = grpIdlingQuantity.ForeColor = grpPriority.ForeColor = colorTxt;
 
             // Dropdown
+            rotationMinutes.BackColor = colorBgd;
+            rotationMinutes.ForeColor = colorTxt;
             cboLanguage.BackColor = colorBgd;
             cboLanguage.ForeColor = colorTxt;
 
