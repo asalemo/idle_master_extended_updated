@@ -40,6 +40,8 @@ namespace IdleMasterExtended
                 string page = await session.ReadAsync(url);
                 return page == "EXPIRED" ? string.Empty : page;
             }
+            // Use the same badge language as the private browser session.
+            url += url.Contains("?") ? "&l=english" : "?l=english";
             for (int attempt = 0; attempt <= count; attempt++)
             {
                 using (var client = new CookieClient())

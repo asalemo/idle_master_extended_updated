@@ -142,8 +142,8 @@ namespace IdleMasterExtended
                 var hoursNode = document.DocumentNode.SelectSingleNode("//div[@class=\"badge_title_stats_playtime\"]");
                 var hours = Regex.Match(hoursNode.InnerText, @"[0-9\.,]+").Value;
 
-                var cardNode = hoursNode.ParentNode.SelectSingleNode(".//span[@class=\"progress_info_bold\"]");
-                var cards = cardNode == null ? string.Empty : Regex.Match(cardNode.InnerText, @"[0-9]+").Value;
+                var cards = ReadRemainingCards(hoursNode.ParentNode);
+                if (cards == null) return null;
 
                 UpdateStats(cards, hours);
                 return RemainingCard != 0;
@@ -153,6 +153,17 @@ namespace IdleMasterExtended
                 Logger.Exception(ex, "Badge -> CanCardDrops, for id = " + AppId);
             }
             return null;
+        }
+
+        internal static string ReadRemainingCards(HtmlNode scope)
+        {
+            var node = scope.SelectSingleNode(".//span[contains(concat(' ', normalize-space(@class), ' '), ' progress_info_bold ')]");
+            if (node == null) return null;
+            var text = System.Net.WebUtility.HtmlDecode(node.InnerText).Trim();
+            var number = Regex.Match(text, @"[0-9]+");
+            if (number.Success) return number.Value;
+            return Regex.IsMatch(text, @"^no (?:more )?card drops? remaining\.?$", RegexOptions.IgnoreCase)
+                ? "0" : null;
         }
 
         public void UpdateStats(string remaining, string hours)

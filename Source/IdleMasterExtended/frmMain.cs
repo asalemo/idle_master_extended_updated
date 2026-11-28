@@ -207,8 +207,8 @@ namespace IdleMasterExtended
                 var nameNode = badge.SelectSingleNode(".//div[@class=\"badge_title\"]");
                 var name = WebUtility.HtmlDecode(nameNode.FirstChild.InnerText).Trim();
 
-                var cardNode = badge.SelectSingleNode(".//span[@class=\"progress_info_bold\"]");
-                var cards = cardNode == null ? string.Empty : Regex.Match(cardNode.InnerText, @"[0-9]+").Value;
+                var cards = Badge.ReadRemainingCards(badge);
+                if (cards == null) continue;
 
                 if (byId.TryGetValue(appid, out var badgeInMemory))
                 {
