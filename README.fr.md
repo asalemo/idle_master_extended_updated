@@ -1,18 +1,18 @@
 # Idle Master Extended Updated
 
-[English](README.md) · [Télécharger la RC Windows x64](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.7) · [Wiki du fork](https://github.com/asalemo/idle_master_extended_updated/wiki)
+[English](README.md) · [Télécharger la RC Windows x64](https://github.com/asalemo/idle_master_extended_updated/releases/tag/v1.11.0-rc.8) · [Wiki du fork](https://github.com/asalemo/idle_master_extended_updated/wiki)
 
 Ce fork Windows d’Idle Master Extended repère les jeux de ta bibliothèque Steam qui ont encore des cartes à distribuer. Il utilise le programme auxiliaire `steam-idle.exe` pour signaler une activité en jeu à Steam. Steam détermine le moment où les cartes sont distribuées.
 
-[Tester le compteur de cartes de la RC7](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas#tester-le-compteur-de-cartes-dans-la-rc7)
+[Tester le compteur de cartes de la RC8](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas#tester-le-compteur-de-cartes-dans-la-rc8)
 
-## Choisir sa connexion dans la RC7
+## Choisir sa connexion dans la RC8
 
 Clique sur **Se connecter**, puis choisis **Se connecter avec Steam** ou **Saisir les informations de session**. La saisie manuelle accepte sessionid, steamLoginSecure et le cookie parental facultatif pour cette exécution. Les préférences sont conservées. Les diagnostics et les compteurs d’activité restent en mémoire. La connexion par navigateur utilise un profil privé temporaire que l’application tente de supprimer à la fermeture du navigateur. Un arrêt forcé peut laisser des fichiers temporaires.
 
 ## Guide et langue de l’interface
 
-[Guide RC7 : se connecter à Steam, changer de langue et tester un seul jeu](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas) · [Tester les deux modes de connexion et vérifier les données conservées après fermeture](https://github.com/asalemo/idle_master_extended_updated/wiki/Verifier-la-confidentialite-RC7)
+[Guide RC8 : se connecter à Steam, changer de langue et tester un seul jeu](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas) · [Tester les deux modes de connexion et vérifier les données conservées après fermeture](https://github.com/asalemo/idle_master_extended_updated/wiki/Verifier-la-confidentialite-RC8)
 
 Dans **Fichier → Réglages**, choisis **Langue de Windows** ou le nom d’une langue, puis redémarre l’application.
 La connexion Steam, le test d’un jeu et les diagnostics sont disponibles en français, anglais, allemand, espagnol, italien et portugais (Portugal et Brésil). Pour les autres langues de l’interface, les textes qui restent à traduire s’affichent en anglais.
@@ -25,19 +25,19 @@ La connexion Steam, le test d’un jeu et les diagnostics sont disponibles en fr
 
 Les versions publiées pour ce fork figurent sur la [page des versions](https://github.com/asalemo/idle_master_extended_updated/releases). Pour tester une modification présente uniquement sur la branche `develop`, compile cette branche.
 
-## Suivi de la file sur develop
+## Suivi de la file dans la RC8
 
 Ouvre **Fichier → File de jeux** pour voir les titres actifs, en attente et reportés, passer le jeu actif, suspendre sa rotation ou remettre un titre en tête. En traitement individuel, la fenêtre indique la dernière lecture confirmée et la progression vers la rotation. Les résultats de session comptent les baisses par AppID, les jeux terminés et les lectures en échec. Avec le tri par défaut, un jeu admissible peut démarrer pendant la lecture des autres pages. Un tri global par nombre de cartes attend la bibliothèque complète.
 
-## Délai de rotation réglable dans la RC7
+## Délai de rotation réglable dans la RC8
 
 Dans **Fichier → Réglages**, règle **Changer si le compteur reste inchangé (min)** entre 1 et 1 440 minutes. Le délai par défaut est de 120 minutes. Pour un essai rapide, choisis 3 minutes et utilise la file automatique avec un jeu actif et au moins un autre jeu admissible. Diagnostics indique la durée observée lors du passage au jeu suivant. Tu peux ensuite rétablir 120 minutes.
 
-## File automatique dans la RC7
+## File automatique dans la RC8
 
 Quand un seul jeu est actif et que les vérifications réussies indiquent le même nombre positif de cartes pendant le délai choisi (120 minutes par défaut), la file passe au jeu suivant lors de la vérification. Diagnostics indique le jeu, le compteur et la durée. Le jeu reporté reste dans la file. Si lui seul est admissible, il reste actif. Une variation du compteur, une lecture en échec ou une pause remet la durée à zéro.
 
-[Vérifier le passage au jeu suivant et la durée dans Diagnostics](https://github.com/asalemo/idle_master_extended_updated/wiki/Verifier-la-rotation-RC7)
+[Vérifier le passage au jeu suivant et la durée dans Diagnostics](https://github.com/asalemo/idle_master_extended_updated/wiki/Verifier-la-rotation-RC8)
 
 ## Fonctionnement du mode rapide
 
@@ -72,3 +72,5 @@ Utilise Visual Studio avec la charge de travail **Développement Desktop .NET** 
 ## Origine et crédits
 
 Ce projet reprend [Idle Master Extended de Jonas Nilson](https://github.com/jonas-med-ett-s/idle_master_extended), lui-même issu d’[Idle Master de jshackles](https://github.com/jshackles/idle_master), basé sur le code original de Stumpokapow. Le projet utilise Steamworks.NET et des icônes Open Iconic. Le [wiki historique](https://github.com/jonas-med-ett-s/idle_master_extended/wiki) décrit la configuration et les fonctions de la version d’origine. Voir la [licence](LICENSE).
+
+[Tester la file de jeux de la RC8](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas#tester-la-file-de-jeux-de-la-rc8)
