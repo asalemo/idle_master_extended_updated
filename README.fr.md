@@ -73,4 +73,4 @@ Utilise Visual Studio avec la charge de travail **Développement Desktop .NET** 
 
 Ce projet reprend [Idle Master Extended de Jonas Nilson](https://github.com/jonas-med-ett-s/idle_master_extended), lui-même issu d’[Idle Master de jshackles](https://github.com/jshackles/idle_master), basé sur le code original de Stumpokapow. Le projet utilise Steamworks.NET et des icônes Open Iconic. Le [wiki historique](https://github.com/jonas-med-ett-s/idle_master_extended/wiki) décrit la configuration et les fonctions de la version d’origine. Voir la [licence](LICENSE).
 
-[Tester la file de jeux de la RC8](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas#tester-la-file-de-jeux-de-la-rc8)
+[Comparer le badge Steam et tester la rotation en trois minutes (modèle de résultat)](https://github.com/asalemo/idle_master_extended_updated/wiki/Premiers-pas#comparer-le-badge-steam-et-vérifier-la-rotation-automatique-en-trois-minutes)

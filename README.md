@@ -57,4 +57,4 @@ Build the helper first, then the desktop solution in **Release | Any CPU** using
 
 Based on [Idle Master Extended by Jonas Nilson](https://github.com/jonas-med-ett-s/idle_master_extended) and [Idle Master by jshackles](https://github.com/jshackles/idle_master), originally based on work by Stumpokapow. Uses Steamworks.NET and Open Iconic. See the [license](LICENSE).
 
-[Test the RC8 game queue](https://github.com/asalemo/idle_master_extended_updated/wiki/Getting-started#test-the-rc8-game-queue)
+[Compare the Steam badge and test three-minute rotation (result template)](https://github.com/asalemo/idle_master_extended_updated/wiki/Getting-started#compare-the-steam-badge-and-verify-automatic-rotation-in-three-minutes)
