@@ -23,6 +23,10 @@ Select **Sign In**, then choose **Sign in with Steam** or **Enter session detail
 In **File → Settings**, choose **Windows language** or a language by its native name, then restart the application.
 Steam sign-in, single-game testing and Diagnostics are available in English, French, German, Spanish, Italian and Portuguese (Portugal and Brazil). Other interface languages use English for missing translations.
 
+## Queue monitoring on develop
+
+Open **File → Game queue** to inspect active, waiting and deferred titles, skip the active game, suspend its automatic rotation or move a title to the front. The solo view shows the last confirmed read and rotation progress. Session totals count decreases per AppID, completed games and failed reads. With default sorting, eligible solo games can start while later badge pages load. Global card-count sorting waits for the full library.
+
 ## Adjustable rotation delay in RC7
 
 Open **File → Settings** and set **Switch after unchanged drops (min)** to a value from 1 to 1440. The default is 120 minutes. For a short test, select 3 minutes and run the automatic queue with one active game and at least one other eligible game. Diagnostics reports the elapsed time when the queue switches. Restore 120 minutes after testing if desired.

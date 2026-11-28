@@ -398,4 +398,22 @@ celles-ci peuvent être utilisées par un pirate pour se connecter à votre comp
   <data name="cards_stalled_next" xml:space="preserve"><value>{0} cartes restantes depuis {1} h {2} min. Passage au jeu suivant.</value></data>
   <data name="cards_stalled_only" xml:space="preserve"><value>{0} cartes restantes depuis {1} h {2} min. Seul ce jeu est admissible.</value></data>
   <data name="rotation_delay_minutes" xml:space="preserve"><value>Changer si le compteur reste inchangé (min)</value></data>
+  <data name="queue_title" xml:space="preserve"><value>File de jeux</value></data>
+  <data name="queue_held" xml:space="preserve"><value>Rotation suspendue pour ce jeu</value></data>
+  <data name="queue_only" xml:space="preserve"><value>Seul jeu admissible</value></data>
+  <data name="queue_elapsed" xml:space="preserve"><value>Compteur inchangé : {0} / {1} min</value></data>
+  <data name="queue_last" xml:space="preserve"><value>Dernier compteur confirmé à {0}</value></data>
+  <data name="queue_retry" xml:space="preserve"><value>Lecture échouée à {0} · nouvel essai dans {1} s</value></data>
+  <data name="rotation_read_failed" xml:space="preserve"><value>Mesure reprise après un échec de lecture</value></data>
+  <data name="rotation_count_changed" xml:space="preserve"><value>Compteur modifié · mesure recommencée</value></data>
+  <data name="queue_active" xml:space="preserve"><value>Actif</value></data>
+  <data name="queue_deferred" xml:space="preserve"><value>Reporté</value></data>
+  <data name="queue_waiting" xml:space="preserve"><value>En attente</value></data>
+  <data name="queue_skip" xml:space="preserve"><value>Passer maintenant</value></data>
+  <data name="queue_hold" xml:space="preserve"><value>Garder ce jeu actif</value></data>
+  <data name="queue_release" xml:space="preserve"><value>Reprendre la rotation</value></data>
+  <data name="queue_front" xml:space="preserve"><value>Remettre en tête</value></data>
+  <data name="queue_totals" xml:space="preserve"><value>Cartes confirmées : {0} · Jeux terminés : {1} · Lectures en échec : {2}</value></data>
+  <data name="rotation_helper_reset" xml:space="preserve"><value>Mesure reprise après arrêt de l’auxiliaire</value></data>
+  <data name="rotation_pause_reset" xml:space="preserve"><value>Mesure reprise après la pause</value></data>
 </root>

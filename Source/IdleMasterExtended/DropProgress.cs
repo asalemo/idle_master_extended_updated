@@ -6,6 +6,7 @@ namespace IdleMasterExtended
     {
         private int lastCount;
         private TimeSpan since;
+        internal TimeSpan Elapsed(TimeSpan now) => lastCount > 0 ? now - since : TimeSpan.Zero;
         internal bool Reported { get; set; }
 
         internal void Reset()

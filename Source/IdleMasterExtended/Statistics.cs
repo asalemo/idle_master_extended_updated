@@ -1,55 +1,38 @@
-﻿namespace IdleMasterExtended
+using System;
+using System.Collections.Generic;
+
+namespace IdleMasterExtended
 {
     public class Statistics
     {
-        private uint sessionMinutesIdled = 0;
-        private uint sessionCardIdled = 0;
-        private uint remainingCards = 0;
+        private readonly Dictionary<int, int> counts = new Dictionary<int, int>();
+        private readonly Dictionary<int, DateTime> confirmed = new Dictionary<int, DateTime>();
+        private readonly HashSet<int> completed = new HashSet<int>();
+        private uint minutes, drops;
+        internal int Failures { get; private set; }
+        internal int Completed => completed.Count;
+        public uint getSessionMinutesIdled() => minutes;
+        public uint getSessionCardIdled() => drops;
+        public void increaseMinutesIdled() => minutes++;
+        internal void Failed() => Failures++;
 
-        public uint getSessionMinutesIdled()
+        internal DateTime? LastRead(int id)
         {
-            return sessionMinutesIdled;
+            DateTime time;
+            return confirmed.TryGetValue(id, out time) ? time : (DateTime?)null;
         }
 
-        public uint getSessionCardIdled()
+        internal void Observe(int id, int count)
         {
-            return sessionCardIdled;
-        }
-
-        public uint getRemainingCards()
-        {
-            return remainingCards;
-        }
-
-        public void setRemainingCards(uint remainingCards)
-        {
-            this.remainingCards = remainingCards;
-        }
-
-        public void checkCardRemaining(uint actualCardRemaining)
-        {
-            if (actualCardRemaining < remainingCards)
+            if (count < 0) return;
+            int previous;
+            if (counts.TryGetValue(id, out previous) && previous > count)
             {
-                increaseCardIdled(remainingCards - actualCardRemaining);
-                remainingCards = actualCardRemaining;
+                drops += (uint)(previous - count);
+                if (count == 0) completed.Add(id);
             }
-            else if (actualCardRemaining > remainingCards)
-            {
-                remainingCards = actualCardRemaining;
-            }
-
+            counts[id] = count;
+            confirmed[id] = DateTime.Now;
         }
-
-        public void increaseCardIdled(uint number)
-        {
-            sessionCardIdled += number;
-        }
-
-        public void increaseMinutesIdled()
-        {
-            sessionMinutesIdled++;
-        }
-
-
     }
 }

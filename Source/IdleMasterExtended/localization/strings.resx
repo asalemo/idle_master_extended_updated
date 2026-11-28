@@ -399,4 +399,22 @@ your Steam account.</value>
   <data name="cards_stalled_next" xml:space="preserve"><value>Card drops remaining: {0}, unchanged for {1} h {2} min. Moving to the next game.</value></data>
   <data name="cards_stalled_only" xml:space="preserve"><value>Card drops remaining: {0}, unchanged for {1} h {2} min. This is the only eligible game.</value></data>
   <data name="rotation_delay_minutes" xml:space="preserve"><value>Switch after unchanged drops (min)</value></data>
+  <data name="queue_title" xml:space="preserve"><value>Game queue</value></data>
+  <data name="queue_held" xml:space="preserve"><value>Rotation suspended for this game</value></data>
+  <data name="queue_only" xml:space="preserve"><value>Only eligible game</value></data>
+  <data name="queue_elapsed" xml:space="preserve"><value>Unchanged: {0} / {1} min</value></data>
+  <data name="queue_last" xml:space="preserve"><value>Last confirmed count: {0}</value></data>
+  <data name="queue_retry" xml:space="preserve"><value>Read failed at {0} · retry in {1} s</value></data>
+  <data name="rotation_read_failed" xml:space="preserve"><value>Observation restarted after a failed read</value></data>
+  <data name="rotation_count_changed" xml:space="preserve"><value>Counter changed · observation restarted</value></data>
+  <data name="queue_active" xml:space="preserve"><value>Active</value></data>
+  <data name="queue_deferred" xml:space="preserve"><value>Deferred</value></data>
+  <data name="queue_waiting" xml:space="preserve"><value>Waiting</value></data>
+  <data name="queue_skip" xml:space="preserve"><value>Skip now</value></data>
+  <data name="queue_hold" xml:space="preserve"><value>Keep this game active</value></data>
+  <data name="queue_release" xml:space="preserve"><value>Resume rotation</value></data>
+  <data name="queue_front" xml:space="preserve"><value>Move to front</value></data>
+  <data name="queue_totals" xml:space="preserve"><value>Confirmed drops: {0} · Completed games: {1} · Failed reads: {2}</value></data>
+  <data name="rotation_helper_reset" xml:space="preserve"><value>Observation restarted after helper exit</value></data>
+  <data name="rotation_pause_reset" xml:space="preserve"><value>Observation restarted after pause</value></data>
 </root>

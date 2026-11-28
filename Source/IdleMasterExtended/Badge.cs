@@ -160,8 +160,8 @@ namespace IdleMasterExtended
             var node = scope.SelectSingleNode(".//span[contains(concat(' ', normalize-space(@class), ' '), ' progress_info_bold ')]");
             if (node == null) return null;
             var text = System.Net.WebUtility.HtmlDecode(node.InnerText).Trim();
-            var number = Regex.Match(text, @"[0-9]+");
-            if (number.Success) return number.Value;
+            var number = Regex.Match(text, @"^([0-9]+)\s+card drops? remaining\.?$", RegexOptions.IgnoreCase);
+            if (number.Success && int.TryParse(number.Groups[1].Value, out var count)) return count.ToString(CultureInfo.InvariantCulture);
             return Regex.IsMatch(text, @"^no (?:more )?card drops? remaining\.?$", RegexOptions.IgnoreCase)
                 ? "0" : null;
         }

@@ -25,6 +25,10 @@ La connexion Steam, le test d’un jeu et les diagnostics sont disponibles en fr
 
 Les versions publiées pour ce fork figurent sur la [page des versions](https://github.com/asalemo/idle_master_extended_updated/releases). Pour tester une modification présente uniquement sur la branche `develop`, compile cette branche.
 
+## Suivi de la file sur develop
+
+Ouvre **Fichier → File de jeux** pour voir les titres actifs, en attente et reportés, passer le jeu actif, suspendre sa rotation ou remettre un titre en tête. En traitement individuel, la fenêtre indique la dernière lecture confirmée et la progression vers la rotation. Les résultats de session comptent les baisses par AppID, les jeux terminés et les lectures en échec. Avec le tri par défaut, un jeu admissible peut démarrer pendant la lecture des autres pages. Un tri global par nombre de cartes attend la bibliothèque complète.
+
 ## Délai de rotation réglable dans la RC7
 
 Dans **Fichier → Réglages**, règle **Changer si le compteur reste inchangé (min)** entre 1 et 1 440 minutes. Le délai par défaut est de 120 minutes. Pour un essai rapide, choisis 3 minutes et utilise la file automatique avec un jeu actif et au moins un autre jeu admissible. Diagnostics indique la durée observée lors du passage au jeu suivant. Tu peux ensuite rétablir 120 minutes.
